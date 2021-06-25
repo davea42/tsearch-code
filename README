@@ -3,7 +3,7 @@ Written January  2014
 Updated June 2021
 
 This is not a library.
-It is a collection of implemenations of
+It is a collection of implementations of
 tsearch functions copyrighted by the
 2-clause license ("Simplified BSD License" or "FreeBSD License")
 so it's easy for anyone to copy and use in their projects.
@@ -12,7 +12,6 @@ Below see:
 ================== WHY TSEARCH?
 ================== LICENSING:
 ================== INTERFACE ODDITIES:
-================== DOCUMENTATION ODDITIES:
 ================== IMPLEMENTATION ODDITIES:
 ================== OTHER DIRECTORIES:
 ================== RUNNING TESTS
@@ -44,20 +43,21 @@ the GNU-designed hsearch_r() interface set is nicely designed.
 
 The attached C code is a small set of implementations of
 C search code.  Based on algorithms in Knuth Volume 3
-(2nd Ed) and Sedgewick 4th Edition.
+(2nd Ed) and Sedgewick 4th Edition (see more detailed
+references below)..
 
 All the code here is implemented by me. I have never read the
-source to any other implementations of the tsearch algorighms
+source to any other implementations of the tsearch algorithms
 or interfaces so this is a clean-room implementation.
 
 The hash version weakens the correspondence to tree based
 tsearch because, well, it's not a tree.  So twalk() behaves
-differently than a tree-based version and an initialization.
+differently than a tree-based version and and
+has a special requirement at initialization.
 
-Non-GNU libc usually has no tdestroy().   The set of functions
+Non-GNU libc usually has no tdestroy().  The set of functions
 here provides a tdestroy() for all the tree/hash function
 sets here.
-
 
 ================== WHY TSEARCH?
 
@@ -85,16 +85,22 @@ the BSD open-source license.
 
 ================== INTERFACE ODDITIES:
 
-It's not really easy to understand whether any given
-call is returning
-	success, action succeeded
-        tsearch success - added record
-        tsearch success - record already in tree
-        fail due to internal error or improper argument.
-        requested action impossible 
+It's not really easy to understand precisely what any call did.
+If a call is returning
+        Non-null return
+         tfind:
+	  success, action succeeded
+         tsearch returns one of:
+          tsearch success - added record
+          tsearch success - record already in tree
+           so nothing added or changed.
+         tdelete:
+	  success, action succeeded
+        Null return:
+         fail due to internal error or improper argument.
+         requested action impossible 
             (tfind() fails to find a record, or tdelete() fails
             to find the record to delete)
-
 
 Speaking of C here, so, there is no try/catch available.
 
@@ -102,17 +108,7 @@ It might have been nice if twalk() let the user-provided
 action code indicate to twalk() that the user wanted it to stop
 walking the tree.
 
-I won't be changing the interface though.
-I am staying with the standard interfaces.
-
-================== DOCUMENTATION ODDITIES:
-
-The GNU/Linux man pages on tsearch() and friends are nearly
-useless as you won't understand how to use the functions from
-reading that man page.
-
-The prototype for tfind() in the man page is slightly wrong
-while the headers in <search.h> are correct.
+We are staying with the standard interfaces.
 
 ================== IMPLEMENTATION ODDITIES:
 
@@ -133,8 +129,8 @@ result in a standard-based naming of the functions.
 
 The return value from tdelete() is particularly problematic
 because it purports to return a pointer to another record
-than the one deleted, yet no such record necessarily exists.
-And in the case of
+than the one deleted, yet no such record necessarily exists,
+but if something is deleted a non-null pointer is returned.
 
 The hash version requires use of the new function
 dwarf_initialize_search_hash() to provide a hashing
@@ -150,7 +146,6 @@ tree or hash to stdout.
 The #include .h file set used here makes it much easier
 for me to move these files to another project as necessary.
 You will probably want to revise the #include set a little.
-
 
 ================== OTHER DIRECTORIES:
 
@@ -214,22 +209,25 @@ machine a run takes around seven minutes.
 
 ================== REFERENCES:
 
-Donald E Knuth, The Art of Computer Programming Volume 3,
-Second Edition.
+Donald E Knuth, The Art of Computer Programming
+Volume 3, Second Edition.
 
-(Quite difficult to interpret some parts of Knuth's algorithms,
-but then I always found Knuth hard to understand. Still,
-Knuth is the essential source for algorithms.)
+(Quite difficult to interpret some parts of Knuth's
+algorithms, but then I always found Knuth hard to
+understand. Still, Knuth is the essential source
+for algorithms.)
 
-The Open Group, The Single UNIX Specification, Version 3(2001).
-The Single Unix Specification (or whatever it is called now)
-is a reference source everyone should have.
+The Open Group, The Single UNIX Specification,
+Version 3(2001).  The Single Unix Specification
+(or whatever it is called now) is a reference source
+everyone should have.
 
-Robert Sedgewick and Kevin Wayne, Algorithms (4th Ed).
-This is the crucial reference on red-black trees.  There is a
-crucial fix in the errata of the 3rd printing.  In addition,
-in dwarf_tsearchred.c in two places I had to fix things,
-look for 'Mistake' in the source.
+Robert Sedgewick and Kevin Wayne, Algorithms (4th
+Ed).  This is the crucial reference on red-black
+trees.  There is a crucial fix in the errata of the
+3rd printing.  In addition, in dwarf_tsearchred.c in
+two places I had to fix things, look for 'Mistake'
+in the source.
 
 http://www.prevanders.net/tsearch.html
 
