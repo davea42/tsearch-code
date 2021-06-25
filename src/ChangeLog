@@ -1,0 +1,7 @@
+2021-06-25 David Anderson
+    * Source moved from libdwarf to its own
+      git file set. Shortly to be public
+      on github.
+2021-05-14 David Anderson
+    * scripts/comparator.py,scripts/concatlines.py:
+      Reformatted to standard python style.
