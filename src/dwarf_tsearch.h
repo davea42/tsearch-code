@@ -75,9 +75,11 @@ typedef enum
 DW_VISIT;
 
 /* void * return values are actually
-   void **key so you must dereference these
-   once to get a key you passed in.
-
+       void **key so you must dereference these
+       once to get a key pointer you passed in.
+   root is the root node , a part of the value tree.
+   rootp is a pointer to the root node, rootp is not
+       in the tree at all. 
 */
 
 void *dwarf_tsearch(const void * /*key*/, void ** /*rootp*/,
@@ -110,13 +112,13 @@ void dwarf_tdestroy(void * /*root*/,
 
 /*  Prints  a simple tree representation to stdout. For debugging.
 */
-void dwarf_tdump(const void*root,
+void dwarf_tdump(const void * root,
     char *(* /*keyprint*/)(const void *),
     const char *msg);
 
 /* Returns NULL  and does nothing
    unless the implemenation used uses a hash tree. */
-void * dwarf_initialize_search_hash( void **treeptr,
-    DW_TSHASHTYPE (*hashfunc)(const void *key),
+void * dwarf_initialize_search_hash(void ** treeptr,
+    DW_TSHASHTYPE (*hashfunc)(const void * key),
     unsigned long size_estimate);
 #endif /* DWARF_TSEARCH_H */
