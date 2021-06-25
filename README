@@ -1,8 +1,25 @@
 David Anderson.  
 Written January  2014
-Updated December 2020
+Updated June 2021
 
-See RUNNING TESTS below.
+This is not a library.
+It is a collection of implemenations of
+tsearch functions copyrighted by the
+2-clause license ("Simplified BSD License" or "FreeBSD License")
+so it's easy for anyone to copy and use in their projects.
+
+Below see:
+================== WHY TSEARCH?
+================== LICENSING:
+================== INTERFACE ODDITIES:
+================== DOCUMENTATION ODDITIES:
+================== IMPLEMENTATION ODDITIES:
+================== OTHER DIRECTORIES:
+================== RUNNING TESTS
+================== REFERENCES:
+
+In June 2021 this source moved to its own git project
+on github.com.
 
 In 2013 I realized I could simplify some code in libdwarf
 (another project) by removing some complicated and messy
@@ -42,8 +59,7 @@ here provides a tdestroy() for all the tree/hash function
 sets here.
 
 
-==================
-WHY TSEARCH?
+================== WHY TSEARCH?
 
 The interfaces are of a well-known design.  While
 the interfaces are based on an obsolete style of writing
@@ -62,14 +78,12 @@ The return value from tdelete() is problematic in all versions,
 since it purports to return the parent of the deleted node,
 but what if the deleted node was the root?
 
-==================
-LICENSING:
+================== LICENSING:
 
 I wanted this to be usable in any context, hence the use of
 the BSD open-source license.
 
-==================
-INTERFACE ODDITIES:
+================== INTERFACE ODDITIES:
 
 It's not really easy to understand whether any given
 call is returning
@@ -91,8 +105,7 @@ walking the tree.
 I won't be changing the interface though.
 I am staying with the standard interfaces.
 
-==================
-DOCUMENTATION ODDITIES:
+================== DOCUMENTATION ODDITIES:
 
 The GNU/Linux man pages on tsearch() and friends are nearly
 useless as you won't understand how to use the functions from
@@ -101,8 +114,7 @@ reading that man page.
 The prototype for tfind() in the man page is slightly wrong
 while the headers in <search.h> are correct.
 
-==================
-IMPLEMENTATION ODDITIES:
+================== IMPLEMENTATION ODDITIES:
 
 The code uses names like dwarf_tsearch() instead of just
 tsearch() so one can have both this tsearch() and GNU or
@@ -140,8 +152,7 @@ for me to move these files to another project as necessary.
 You will probably want to revise the #include set a little.
 
 
-==================
-OTHER DIRECTORIES:
+================== OTHER DIRECTORIES:
 
 testdata contains a set of sample allocations, where
 lines starting with 'a' mean add and 'd' means delete.
@@ -155,8 +166,7 @@ into the testcase/* format.
 It is unlikely you will find them much use
 except as starting points.
 
-==================
-RUNNING TESTS
+================== RUNNING TESTS
 
 The test scheme should be revised to do each test 'right'
 and do something about those pointer values printed.
@@ -202,8 +212,7 @@ is normal..
 Overall on an ordinary 3GHz 64Bit
 machine a run takes around seven minutes.
 
-==================
-REFERENCES:
+================== REFERENCES:
 
 Donald E Knuth, The Art of Computer Programming Volume 3,
 Second Edition.
