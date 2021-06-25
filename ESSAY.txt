@@ -15,13 +15,9 @@ tree of, well, any data one might have need to search.
 Tsearch never needs to understand the format of the data.
 
 The functions defined there are  tsearch(), tfind(),
-tdelete(), and twalk().  The description is just as difficult
-to understand as the documentation in release 3.54 of the
-Linux man-pages project (the most recent I have on hand).
-
-The Single Unix Specification page on tsearch() etc is slightly
-different text from the Programmer's Reference Manual and
-the Linux man page, but no clearer.
+tdelete(), and twalk().  It requires careful attention
+to understand it. Note the difference between
+void *root and void**rootp !
 
 The confusion is partly due to the interface definition.
 Until the late 20th century only limited attention was given
@@ -54,13 +50,14 @@ etc. The functionality and interfaces are identical.
 Further reading 
 
 The canonical reference for binary trees and the algorithm
-reference for most of the tsearch code is Donald E. Knuth,
-"The Art of Computer Programming" Volume 3 Sorting and
-Searching, Second Edition.
+reference for most of the tsearch code is
+Donald E Knuth, The Art of Computer Programming
+Volume 3, Second Edition. Section 6.2.2 Binary
+Tree Searching, page 426.  Chapter 6.2.3 Balanced
+Trees, page 458.
 
 "Algorithms" Fourth Edition, Robert Sedgewick and Kevin Wayne,
 is the basis for the red-black tree coding.
-
 
 Wikipedia has quite a few entries of interest.
   http://en.wikipedia.org/wiki/Self-balancing_binary_search_tree
@@ -69,7 +66,8 @@ Wikipedia has quite a few entries of interest.
 are just a few.
 
 After implementing tsearch I looked briefly at
-some other projects.
+some other projects, but these references may be
+out of date.
 
 freecode.net: See the 'GNU libavl' project.
   The libavl libary is a GNU project in C with each tree type
@@ -77,20 +75,20 @@ freecode.net: See the 'GNU libavl' project.
   The interface design is much more sensible than
   Unix TSEARCH.  You  will probably find it in most any
   Linux distribution.  The 2.0.3 tarfile source has no
-  configure step and the 2.0.3 Makefile failed for me,
-  it placed -lm too early on the command line building texitree
-  means the version mentioned on freecode.net:
+  configure step and the 2.0.3 Makefile failed for me.
   ftp://ftp.gnu.org/pub/gnu/avl/avl-2.0.3.tar.gz
   is rather old but shows internal evidence of
   last being updated in 2007 (*.pdf and other file timestamps
   in the tar file). The Makefile fails for me doing plain 'make'.  
   Doing 'make program' to just build the source works fine.
   The interface definitions are more sensible than tsearch,
-  rb_delete returns the deleted item when it succeeds, for example.
+  rb_delete returns the deleted item when it succeeds,
+  for example.
 
 freecode.net: See the 'libredblack' project.
   This project tarfile was last updated in 2003.
-   It is on sourceforge at http://sourceforge.net/projects/redblacktree/
+   It is on sourceforge at
+   http://sourceforge.net/projects/redblacktree/
   Implemented in C.
   Configure worked (version 1.3) but the make step failed
   running the python app ./rbgen due to the presence
@@ -104,8 +102,8 @@ freecode.net: See the 'libredblack' project.
 
 freecode.net: See the project 'Template based B+ Tree'.
   Is in C++ and can be used for searches which are file or
-  memory based through use of C++ templates by the implemenation.
-  Have not attempted to build it.
+  memory based through use of C++ templates by
+  the implemenation.  Have not attempted to build it.
 
 =========
 tsearch:
@@ -149,7 +147,8 @@ Of course the comparison need not be of simple values, it
 could involve anything. This is just a simple sketch.
 
 Return value:
-If tsearch() returns NULL something went wrong. There was insufficient memory
+If tsearch() returns NULL something went wrong.
+There was insufficient memory
 or an internal error of some kind.
 
 Lets call the KEY passed in KEYa.
@@ -160,11 +159,12 @@ Lets call this dereferenced KEY key_deref.
 if KEYa == key_deref then:
   KEYa  was added to the tree.
   Hence the tree now has a copy of
-  the value of key_a.
+  the value of key_a so we must not free it.
 else:
-  KEYa matched a record in the tree and
+  KEYa matched a record in the tree and did
+  nothing so
   you need to free any space you allocated
-  to build the key for this tsearch call. 
+  to build the KEYa for this tsearch call. 
   In our example:
   free(key_a).
   
@@ -179,10 +179,13 @@ The interfaces are the same but the return value is (in
 contrast with tsearch) reasonably clear:
 
 A non-null return is a key (pointer).
-It never adds a new record, it simple tries to find a record.
-A NULL return means either that the search-ed for record did not exist or that
+It never adds a new record, it just tries to find a record.
+A NULL return means either that the search-ed for record
+did not exist or that
 something internal went wrong or perhaps that something incorrect
 was detected at runtime in the arguments passed in.
+
+On return you must free the key you passed in.
 
 ============
 Tdelete:
@@ -198,6 +201,13 @@ it returns NULL.  That is straightforward.
 If the record is deleted tdelete is supposed to return
 a pointer to the parent of the deleted record.
 The content of the deleted record is NOT deleted.
+The assumption implicit here is that key is
+the real record (as found by tfind, for example)
+so by freeing key you complete the deletion.
+A fake key that 'matches' a real key might
+return a value, but you have no way to know
+what the node pointer of the real key is
+so cannot possibly free it.
 
 If the record deleted was the last record in the
 tree,  a NULL is returned and  *rootp is set to NULL.
@@ -223,10 +233,10 @@ memory free do:
     t = tfind(key,&root,compar_func)
     
     if (t) {
-        tdelete(key,&root,compar_func)
+        tdelete(t,&root,compar_func)
     }
     free key
-    free r
+    free t
 
 where what 'free key' means is to free whatever 'key = xxxx'
 allocated. Which means do the same for 'free r'.
@@ -235,8 +245,6 @@ Of course if your keys point into to a static array of data
 then free is unnecessary, but how often will the data be in
 static memory?  And if it is in static storage, why do any
 free at all?
-
-
 
 ============
 Tdestroy:
@@ -253,13 +261,20 @@ assign a NULL to the root.  So you should do
     root = 0;
 after calling tdestroy().
 
-
 ============
 Twalk:
-void *twalk((const void * /*root*/,
+void twalk((const void * /*root*/,
     void (* /*action*/)(const void * /*nodep*/,
     const DW_VISIT  /*which*/,
     const int  /*depth*/));
+
+On each visit to a node the 'action' function
+is called with a pointer to a node, a visit code
+of preorder, postorder, endorder, or leaf,
+and a depth (in the tree). Interior nodes will be
+visited up to three times.
+
+
 
 ============
 Tdump:
@@ -268,7 +283,7 @@ void tdump(const void *rootp,
     const char * msg);
 
 This is unique to the dwarf_tsearch library.  It prints (to
-standard out) a representation of the tree.  The output is
+stdout) a representation of the tree.  The output is
 indented one space per level and ordered such that turning
 the output 90 degrees clockwise shows a kind of picture of the
 tree structure in the way trees are normally shown in books.
@@ -291,18 +306,21 @@ not refer to it again.
 
 ============
 tsearch use using pointers (declarations left out):
-    The struct here is entirely ours: tsearch neither knows nor cares
+    The struct here is entirely ours: tsearch
+    neither knows nor cares
     how it is laid out.
 
     mt = struct example_tentry *mt =
-        (struct example_tentry *)calloc(sizeof(struct example_tentry),1); 
+        (struct example_tentry *)calloc(
+        sizeof(struct example_tentry),1); 
     mt->mt_key = keyvalue;
     mt->mt_data = datavalue;
     errno = 0;
     /* tsearch adds an entry if its not present already. */
     retval = dwarf_tsearch(mt,tree, mt_compare_func  );
     if(retval == 0) {
-        printf("FAIL ENOMEM in search on  %d, give up insertrecsbypointer\n",i);
+        printf("FAIL ENOMEM in search on  %d, give up "
+            "insertrecsbypointer\n",i);
         exit(1);
     } else {
         struct example_tentry *re = 0;
@@ -315,7 +333,8 @@ tsearch use using pointers (declarations left out):
         }
     }
 
-In this case the mt_compare_func() might if using a struct look like:
+In this case the mt_compare_func() might if using a 
+struct look like:
     int
     mt_compare_func(const void *l, const void *r)
     {
@@ -339,15 +358,19 @@ In this case the mt_compare_func() might if using a struct look like:
 tsearch use using values (declarations left out):
             void *mt = (void *)key;
             errno = 0;
-            /* tsearch adds an entry if its not present already. */
-            retval = dwarf_tsearch(mt,tree, value_compare_func  );
+            /*  tsearch adds an entry if its not
+                present already. */
+            retval = dwarf_tsearch(mt,tree, value_compare_func);
             if(retval == 0) {
-                printf("FAIL ENOMEM in search on  %d, give up insertrecsbypointer\n",i);
+                printf("FAIL ENOMEM in search on  %d, "
+                    "give up insertrecsbypointer\n",i);
                 exit(1);
             } else {
-                /* successful search.mt might have been added by the call, 
-                   or maybe it was already in the tree.
-                   It is impossible to tell which */
+                /*  successful search.mt might have been
+                    added by the call, 
+                    or maybe it was already in the tree.
+                    It is impossible to tell which 
+                    in this special use of 'mt' value. */
             }
 In this case the value_compare_func might look like:
              int
@@ -377,15 +400,30 @@ I think the GNU hsearch_r interfaces are a fine
 approach and could be extended to tsearch().  But
 I propose something slightly different.
 
+#define TSE_OK 1
+#define TSE_MEM 2
+#define TSE_ERR 3
+#define TSE_NOTFOUND 4
+#define TSE_DUPLICATE 5
+#define TSE_STOP 6
+
 struct tsearch_base; /* opaque struct, content defined by
    the search code, content not made public */
-int compare_func(void *l, void*r); /* you define comparison function */
-int free_func(void *n); /* you define free function */
+
+/* you define comparison function */
+int compare_func(void *l, void*r); 
+
+/* you define free function */
+int free_func(void *n);
 
 None of the proposed interfaces touch errno.
 
-All functions return 0 on success and an errno on failure.
-They return EINVAL if an argument is incorrect somehow.
+All functions return TSE_OK or
+some other TSE value depending on the call.
+
+Here we present the compare func and free_func
+just once (quite unlike normal tsearch,
+and maybe not the best idea).
 
 int tcreate(struct tsearch_base **base,compare_func,free_func)
     allocate a struct_tsearch_base record and puts a pointer to
@@ -393,35 +431,69 @@ int tcreate(struct tsearch_base **base,compare_func,free_func)
     A call on this by uses is a requirement .
 
     returns:
-    ENOMEM if out of memory.
-    EINVAL if something wrong with an argument or an internal problem.
+    TSE_MEM if out of memory.
+    TSE_ERR if something wrong with an argument or an
+        internal problem.
+    TSE_OK if the base was created (allocated).
 
 int tsearch(void *key,struct tsearch_base *base);
     returns:
-    ENOMEM if out of memory.
-    EINVAL if something wrong with an argument or an internal problem.
+    TSE_MEM if out of memory.
+    TSE_ERR if something wrong with an argument or an
+        internal problem.
+    TSE_DUPLICATE if new record not added, that key in tree
+        already.
+    TSE_OK if new record added.
 
-int tfind(void *key,struct tsearch_base *base);
+int tfind(void *key,struct tsearch_base *base void **foundrec);
     returns:
-    ESRCH if not found.
-    EINVAL if something wrong with an argument or an internal problem.
+    TSE_OK if record returned in *foundrec
+       (up to you to free key)
+    TSE_ERR if something wrong with an argument or an
+        internal problem.
+    TSE_NOTFOUND if not found.
+       (up to you to free key)
 
 int tdelete(void *key,struct tsearch_base *base,void **keyout);
     If successful, tdelete deletes the record key identifies
     and returns that record's recorded key through *keyout.
-    So if a free()or other action is required you can take that action.
+    So if a free()or other action is required you can take
+    that action.
+    You must free key.
 
     The 'base' struct tsearch_base record is NOT freed, 
     it remains, whether the tree has any records left or not.
 
     returns:
-    ESRCH if key not found.
-    EINVAL if something wrong with an argument or an internal problem.
+    TSE_NOTFOUND if key not found.
+    TSE_OK if key found and the found key 
+        is returned via keyout.
+    TSE_ERR if something wrong with an argument or an
+        internal problem.
+
+int twalk(struct tsearch_base *base, 
+    int (* /*action*/)(const void * /*nodep*/,
+    const DW_VISIT  /*which*/,
+    const int  /*depth*/)
+    The action function returns TSE_OK normally,
+    TSE_ERR if something is wrong, stop the walk
+    and return TSE_ERR.  Or 
+    TSE_STOP a soon as an action function returns
+    TSE_STOP.
+
+    twalk returns:
+    TSE_ERR if something wrong with an argument or an
+       internal problem.
+    TSE_OK if all is well.
+    TSE_STOP if an action function call returned TSE_STOP.
 
 int tsize(struct tsearch_base *base,unsigned long*count_out);
-    Stores a count of the records currently recorded in the tree in *count_out.
+    Stores a count of the records currently recorded
+    in the tree in *count_out.
 
-    EINVAL if something wrong with an argument or an internal problem.
+    TSE_ERR if something wrong with an argument or an
+       internal problem.
+    TSE_OK if all is well.
     
 
 int tdestroy(struct tsearch_base **base);
@@ -432,5 +504,8 @@ int tdestroy(struct tsearch_base **base);
     to reset your tree pointer.
 
     returns:
-    EINVAL if something wrong with an argument or an internal problem.
+    TSE_ERR if something wrong with an argument or an
+       internal problem.
+    TSE_OK  if the the tree is destroyed.
+       base is zeroed.
 =================
