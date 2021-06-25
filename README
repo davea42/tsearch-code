@@ -210,17 +210,9 @@ machine a run takes around seven minutes.
 ================== REFERENCES:
 
 Donald E Knuth, The Art of Computer Programming
-Volume 3, Second Edition.
-
-(Quite difficult to interpret some parts of Knuth's
-algorithms, but then I always found Knuth hard to
-understand. Still, Knuth is the essential source
-for algorithms.)
-
-The Open Group, The Single UNIX Specification,
-Version 3(2001).  The Single Unix Specification
-(or whatever it is called now) is a reference source
-everyone should have.
+Volume 3, Second Edition. Section 6.2.2 Binary
+Tree Searching, page 426.  Chapter 6.2.3,
+page 458.
 
 Robert Sedgewick and Kevin Wayne, Algorithms (4th
 Ed).  This is the crucial reference on red-black
