@@ -25,12 +25,10 @@ all:  binarysearch eppingerdel hashsearch gnusearch redblack balancedsearch
 
 tsearch_testerstd.o: $(TESTMAIN) $(HDR)
 	$(CC) $(OPTS) -c  $(TESTMAIN) -o tsearch_testerstd.o
-
 dwarf_tsearchbin.o: $(TS)  $(HDR)
 	$(CC) $(OPTS) -c  $(TS) 
 binarysearch: dwarf_tsearchbin.o  $(TESTMAINOBJ) $(HDR)
 	$(CC) $(OPTS) $(TESTMAINOBJ) dwarf_tsearchbin.o -o binarysearch
-
 dwarf_tsearchbal.o: $(TSB) $(HDR)
 	$(CC) $(OPTS) -c  $(TSB)
 balancedsearch: dwarf_tsearchbal.o $(TESTMAINOBJ) $(HDR)

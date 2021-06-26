@@ -32,31 +32,10 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /* Testing tsearch etc.
 
-    tsearch [-adds] [-std] -byvalue inputfile ...
+    tsearch [--std] inputfile ...
 
-    If one or more inputfile is listed then 'standard' tests
-    are not done.
-
-    If -std is given then (even with inputfile) standard
+    If --std is not given then only extra
     tests are done.
-
-    If -adds is given then extra tdump output is generated
-    from one of the test driver functions.
-
-    If -showa is given then extra output is generated identifying
-    some some add/delete actions.
-
-    If -byvalue is given then the tests are run using values
-    not pointers.
-    Run like this it is impossible to differentiate whether
-    dwarf_tsearch() adds a new tree entry or just finds an
-    existing one.
-    In the right circumstances this approach is useful in that
-    it is a bit faster than the default.  See applybyvalue() and
-    applybypointer.
-
-    For timing tests, you probably want to compile with
-    -DFULL_SPEED_RUN
 
 */
 
@@ -96,16 +75,10 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /* The struct is trivially usable to implement a set or
    map (mapping an integer to a string).
    The following struct is the example basis
-   because that is the capability I wanted to use.
-   tsearch has no idea what data is involved,
-   only the comparison function
+   because that is the capability I wanted to use
+   for -std.
    mt_compare_func() and the  free function mt_free_func()
    (passed in to tsearch calls) know what data is involved.
-   Making tsearch very flexible indeed.
-
-   Obviously the use of a struct (and this particular
-   struct)  is arbitrary, it is just an example.
-
 */
 
 struct example_tentry {
@@ -150,19 +123,14 @@ applybypointer(struct myacts *m,
     int hideactions,
     int printwalk,
     int dumpeverystage);
-static int
-applybyvalue(struct myacts *m,
-    const char *msg,
-    int hideactions,
-    int printwalk,
-    int dumpeverystage);
 int(*applyby)(struct myacts *m,
     const char *msg,
     int hideactions,
     int printwalk,
-    int dumpeverystage);
+    int dumpeverystage) = applybypointer;
 
 
+static int g_hideactions = 0;
 static const int increaseorder[] = {1,2,3,4,5,6};
 static const int decreaseorder[] = {6,5,4,3,2,1};
 /* The following a pseudo-random order. */
@@ -313,19 +281,7 @@ static struct myacts sequential64[] = {
 {0,0}
 };
 
-static int runstandardtests = 1;
-static int g_hideactions = 1;
-/* showallactions is for debugging tree add/delete
-   and should almost always be zero. */
-static int g_showallactions = 0;
-static char   filetest1name[2000];
-static struct myacts *filetest1 = 0;
-static char   filetest2name[2000];
-static struct myacts *filetest2 = 0;
-static char   filetest3name[2000];
-static struct myacts *filetest3 = 0;
-static char   filetest4name[2000];
-static struct myacts *filetest4 = 0;
+static int runstandardtests = 0;
 
 static int
 get_record_id(enum insertorder ord,int indx)
@@ -431,6 +387,7 @@ walk_entry(const void *mt_data,DW_VISIT x,int level)
         m->mt_key,m->mt_name);
     return;
 }
+#if 0
 static void
 value_only_walk_entry(const void *data,DW_VISIT x,int level)
 {
@@ -445,6 +402,7 @@ value_only_walk_entry(const void *data,DW_VISIT x,int level)
         (unsigned long)val);
     return;
 }
+#endif
 
 #ifndef LIBC_TSEARCH
 static char *
@@ -802,6 +760,7 @@ value_hashfunc(const void *keyp)
     return up;
 }
 #endif /* HASHFUNC */
+#if 0
 static int
 value_compare_func(const void *l, const void *r)
 {
@@ -815,145 +774,7 @@ value_compare_func(const void *l, const void *r)
     }
     return 0;
 }
-
-/* Nothing to free for the 'value' example. */
-static void
-value_node_free(UNUSEDARG void *valp)
-{
-
-}
-
-static int
-insertbyvalue(void **tree, VALTYPE addr,int ct)
-{
-    void *retval = 0;
-    /*  tsearch adds an entry if its not present already. */
-    /*  Since in this test we do not malloc anything there
-        is no free needed either.
-        Instead we just let tsearch store the value in the
-        pointer in the tree.   */
-    VALTYPE  newval = addr;
-    retval = dwarf_tsearch((void *)(uintptr_t)newval,
-        tree, value_compare_func  );
-    if (retval == 0) {
-        printf("FAIL ENOMEM in search  on item %d, value %lu, "
-            "error in insertbyvalue\n",
-            ct, (unsigned long)newval);
-        exit(1);
-    } else {
-        /*  Since we insert a value there is no  possible distinction
-            to be made between newly-inserted and found-in-tree. */
-#ifndef FULL_SPEED_RUN
-        {
-            /* For debugging. */
-            VALTYPE mt2 = addr;
-            retval = dwarf_tfind((void *)(uintptr_t)mt2,
-                tree,value_compare_func);
-            if (!retval) {
-                printf("insertone record %d value 0x%lu failed to add"
-                    " as desired, error\n",
-                    ct,(unsigned long)mt2);
-                return 1;
-            }
-        }
-#endif /*FULL_SPEED_RUN */
-    }
-    return 0;
-
-}
-
-static int
-deletebyvalue(void **tree, unsigned  addr,int ct)
-{
-    void *r = 0;
-    int err=0;
-
-    VALTYPE newval = addr;
-    /*  We are not mallocing, so nothing to free he tree holds
-        simple values for us. */
-    r = dwarf_tfind((void *)(uintptr_t)newval,
-        (void *const*)tree,value_compare_func);
-    if (r) {
-        void *r2 = dwarf_tdelete((void *)(uintptr_t)newval,
-            tree,value_compare_func);
-        if (r2) {
-            /* tdelete returned parent */
-        } else {
-            /* tdelete returned NULL, tree now empty */
-        }
-    } else {
-        printf("deletebyvalue action %d could not find rec! error!"
-            " addr 0x%x\n",
-            addr,ct);
-        err = 1;
-    }
-    return err;
-}
-
-
-
-/*  This demonstrates using a simple integer as the
-    value saved, as itself, not a pointer, per-se.
-
-    The various flags are not important except in that
-    they can help in case bugs still exist.
-
-*/
-static int
-applybyvalue(struct myacts *m,
-    const char *msg,
-    int hideactions,
-    int printwalk,
-    int dumpeverystage)
-{
-    unsigned ct = 1;
-    void *treesq1 = 0;
-    int errcount = 0;
-
-    INITTREE(treesq1,value_hashfunc);
-    printf("special sequence applybyvalue %s\n",msg);
-    for (; m->action_ != 0; m++,ct++) {
-        if (!hideactions) {
-            printf("Action %2u: %s 0x%x val 0x%x\n",ct,
-                describe_action(m->action_),
-                m->action_,m->addr_);
-        }
-        if (m->action_ == 'a') {
-            errcount += insertbyvalue(&treesq1,m->addr_,ct);
-            if (ct == 0) {
-                printf("Add    done. action# %2d value 0x%x\n",
-                    ct,m->addr_);
-                dwarf_tdump(treesq1,value_keyprint,
-                    "first sequence2 added");
-            } else if (dumpeverystage) {
-                dwarf_tdump(treesq1,value_keyprint,"after add");
-            }
-            continue;
-        }
-        if (m->action_ == 'd') {
-            errcount += deletebyvalue(&treesq1,m->addr_,ct);
-            if (dumpeverystage) {
-                printf("Delete done. action# %2d value 0x%x\n",
-                    ct,m->addr_);
-                dwarf_tdump(treesq1,value_keyprint,"after delete");
-            }
-            continue;
-        }
-        printf("Fail applybyvalue, bad action %s entry %d.\n",msg,ct);
-        return 1;
-    }
-    if (printwalk) {
-        printf("Twalk start, simple value \n");
-        dwarf_twalk(treesq1,value_only_walk_entry);
-        printf("Twalk end, simple value\n");
-        dwarf_tdump(treesq1,value_keyprint,
-            "tdump simple value from applybyvalue");
-    }
-    dwarf_tdestroy(treesq1,value_node_free);
-    return errcount;
-
-}
-
+#endif
 
 static int
 standard_tests(void)
@@ -1042,7 +863,8 @@ standard_tests(void)
             g_hideactions,0,0);
         errcount += applyby(&sequence2[0],"Sequence 2, a",
             g_hideactions,0,0);
-    } else {
+    } else 
+    {
         errcount += applyby(&sequence2[0],"Sequence 2, b",
             g_hideactions,0,0);
         errcount += applyby(&sequence3[0],"Sequence 3",
@@ -1053,6 +875,7 @@ standard_tests(void)
     return errcount;
 }
 
+#if 0
 static int
 getaddr(const char *in, unsigned long *addrout)
 {
@@ -1067,183 +890,27 @@ getaddr(const char *in, unsigned long *addrout)
     return 0;
 }
 
-/*  Valid input lines start with
-        # (the rest of the line ignored)
-    or
-        a 12345
-    or
-        d 0x12345
-    meaning add a tree record or delete one, respectively.
-    Where the value is the key.
-    Leading spaces on a line are not allowed.
-    Only a single space after the 'a' or 'd' and before
-    the value is allowed.
-*/
-static int
-build_filetest(struct myacts **tout, char *pathout,
-   const char *filename,FILE *f)
-{
-    size_t bufsize = 500;
-    size_t filelen = 0;
-    size_t ct = 0;
-    int done = 0;
-    size_t ixout = 0;
-    struct myacts *recordacts = 0;
-    char *buf  = 0;
-
-    buf = (char *)calloc(1,bufsize);
-    if (!buf) {
-        printf("FAIL malloc bufsize %lu fails line %d\n",
-            (unsigned long)bufsize,__LINE__);
-    }
-    while(!done) {
-        ssize_t charsread = 0;
-
-        charsread = getline(&buf,&bufsize,f);
-        if (charsread < 0) {
-            done = 1;
-            break;
-        }
-        ++filelen;
-    }
-    rewind(f);
-    /* Leave zeroed entry (at least one) at the end. */
-    recordacts = calloc(sizeof(struct myacts),filelen+2);
-    *tout = recordacts;
-    strcpy(pathout,filename);
-    done = 0;
-    for (ct = 0; !done && ( ct < filelen); ++ct) {
-        ssize_t charsread = 0;
-
-        charsread = getline(&buf,&bufsize,f);
-        if (charsread < 0) {
-            done = 1;
-            break;
-        }
-        if (buf[0] == '#') {
-            continue;
-        }
-        if (buf[0] == 'a' && buf[1] == ' ') {
-            int readaddrfail = 0;
-            unsigned long addr = 0;
-            recordacts[ixout].action_ = 'a';
-            readaddrfail = getaddr(&buf[2],&addr);
-            if (readaddrfail) {
-                fprintf(stderr,"Improper value input, "
-                    "line %lu of file %s\n %s\n",
-                    (unsigned long)ct,filename,buf);
-                return 1;
-            }
-            recordacts[ixout].addr_ = addr;
-        } else if (buf[0] == 'd' && buf[1] == ' ') {
-            int readaddrfail = 0;
-            unsigned long addr = 0;
-            recordacts[ixout].action_ = 'd';
-            readaddrfail = getaddr(&buf[2],&addr);
-            if (readaddrfail) {
-                fprintf(stderr,"Improper value input, line %lu "
-                    "of file %s\n %s\n",
-                    (unsigned long)ct,filename,buf);
-                return 1;
-            }
-            recordacts[ixout].addr_ = addr;
-        } else {
-            fprintf(stderr,"Improper input, line %lu of file %s\n"
-                "%s\n",
-                (unsigned long)ct,filename,buf);
-            return 1;
-        }
-        ixout++;
-    }
-    return  0;
-}
-
-
-static int
-fill_in_filetest(const char *filename)
-{
-    FILE *f = 0;
-    int errcount = 0;
-
-    f = fopen(filename,"r");
-    if (!f) {
-        fprintf(stderr,"Open of %s failed",filename);
-        return 1;
-    }
-    if (!filetest1) {
-        errcount += build_filetest(&filetest1,filetest1name,
-            filename,f);
-    } else if (!filetest2) {
-        errcount += build_filetest(&filetest2,filetest2name,
-            filename,f);
-    } else if (!filetest3) {
-        errcount += build_filetest(&filetest3,filetest3name,
-            filename,f);
-    } else if (!filetest4) {
-        errcount += build_filetest(&filetest4,filetest4name,
-            filename,f);
-    } else {
-        printf("Exceeded limit on input files. %s ignored\n",
-            filename);
-        errcount = 1;
-    }
-
-    fclose(f);
-    return errcount;
-}
-
 static void
 print_usage(const char *a, const char *b,const char *app)
 {
     fprintf(stderr,"%s : %s\n",a,b);
     fprintf(stderr,"run as\n");
-    fprintf(stderr,"  %s [-std] [samplefile]...\n",app);
-    fprintf(stderr,"By default runs standard tests\n");
-    fprintf(stderr,"with pathnames, standard tests are not run\n");
-    fprintf(stderr,"unless -std passed in as first arg.\n");
+    fprintf(stderr,"  %s [-std] [textfile]...\n",app);
     exit(1);
 }
+#endif
 
 static void
 readargs(int argc, char **argv)
 {
-    int ix = 0;
-    int notedstd = 0;
-    int defaultstd = 1;
     if (argc < 2) {
         /* No arguments, take defaults. */
         return;
     }
-    for (ix = 1; ix <argc; ++ix) {
-        int resfail = 0;
-        const char *a=argv[ix];
-        if (strcmp(a,"-showa") == 0) {
-            g_hideactions = 0;
-            continue;
-        }
-        if (strcmp(a,"-adds") == 0) {
-            g_showallactions = 1;
-            continue;
-        }
-        if (strcmp(a,"-std") == 0) {
-            notedstd = 1;
-            continue;
-        }
-        if (strcmp(a,"-byvalue") == 0) {
-            applyby = applybyvalue;
-            continue;
-        }
-        resfail = fill_in_filetest(a);
-        defaultstd = 0;
-        if (resfail) {
-            print_usage("Failed in attempting to read in file ",
-                a,argv[0]);
-        }
-    }
-    runstandardtests = defaultstd;
-    if (notedstd) {
+    if (!strcmp(argv[1],"--std")) {
         runstandardtests = 1;
     }
+    /* Now look for a list of files. Soon. */
     return;
 }
 
@@ -1257,30 +924,13 @@ main(int argc, char **argv)
     if (runstandardtests) {
         errcount += standard_tests();
     }
-    {
-        if (filetest1) {
-            errcount += applyby(filetest1,filetest1name,
-                g_hideactions,0,g_showallactions);
-        }
-        if (filetest2) {
-            errcount += applyby(filetest2,filetest2name,
-                g_hideactions,0,g_showallactions);
-        }
-        if (filetest3) {
-            errcount += applyby(filetest3,filetest3name,
-                g_hideactions,0,g_showallactions);
-        }
-        if (filetest4) {
-            errcount += applyby(filetest4,filetest4name,
-                g_hideactions,0,g_showallactions);
-        }
-    }
-    free(filetest1);
-    free(filetest2);
-    free(filetest3);
-    free(filetest4);
-
     if (errcount) {
+        printf("FAIL std tests");
+    }
+    /* Do extra tests here */
+    
+    if (errcount) {
+        exit(1);
     }
     printf("PASS tsearch test.\n");
     exit(0);
