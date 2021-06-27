@@ -1,0 +1,11 @@
+#!/bin/bash
+echo "Build a Words list called 'testwords' for timing tests."
+../scripts/extractwords.py ../ESSAY.txt >testwords
+# At this point we will shortly add more
+../scripts/extractwords.py /home/davea/dwarf/code/doc/libdwarf.mm >>testwords 
+../scripts/extractwords.py /home/davea/dwarf/code/doc/libdwarfp.mm >>testwords 
+../scripts/extractwords.py /home/davea/dwarf/code/src/lib/libdwarf/*.c >>testwords 
+../scripts/extractwords.py /home/davea/dwarf/code/src/lib/libdwarf/*.h >>testwords 
+../scripts/extractwords.py /home/davea/dwarf/code/src/bin/dwarfdump/*.c >>testwords 
+../scripts/extractwords.py /home/davea/dwarf/code/src/bin/dwarfdump/*.h >>testwords 
+

@@ -72,6 +72,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define dwarf_leaf      leaf
 #endif /* LIBC_TSEARCH */
 
+#define REPORTING
 /* The struct is trivially usable to implement a set or
    map (mapping an integer to a string).
    The following struct is the example basis
@@ -826,6 +827,28 @@ standard_tests(void)
 }
 /* ============end correctness test ===========*/
 /* ============begin large test for timing===========*/
+#ifdef REPORTING
+struct reportdata_s {
+   unsigned r_wordcount;
+   unsigned r_uniquecount;
+   unsigned r_repeatcount;
+} reportcount;
+struct reportdata_s zerorc;
+static void 
+print_counts(void)
+{
+    printf("Counts: words: %u uniqwords %u repeatcount %u\n",
+        reportcount.r_wordcount,
+        reportcount.r_uniquecount,
+        reportcount.r_repeatcount);
+}
+#else /* !REPORTING */
+static void 
+print_counts(void)
+{
+    return;
+}
+#endif /* REPORTING */
 unsigned current_entry_number = 0;
 struct str_entry {
     char *   str_key;
@@ -836,8 +859,7 @@ static struct str_entry *
 make_str_entry(char *key ,char *name)
 {
     struct str_entry *mt =
-        (struct str_entry *)calloc(
-            sizeof(struct str_entry),1);
+        (struct str_entry *)calloc(sizeof(struct str_entry),1);
     if (!mt) {
         printf("calloc fail\n");
         exit(1);
@@ -887,7 +909,6 @@ str_compare_func(const void *l, const void *r)
 {
     const struct str_entry *ml = (struct str_entry *)l;
     const struct str_entry *mr = (struct str_entry *)r;
-    
     return  strcmp(ml->str_key,mr->str_key);
 }
 #if 0
@@ -942,14 +963,6 @@ insert_word_in_tree(char *name)
     void * r = 0;
     struct str_entry *key_deref = 0;
 
-#if 0
-void *dwarf_tsearch(const void * /*key*/, void ** /*rootp*/,
-    int (* /*compar*/)(const void *, const void *));
-
-void *dwarf_tfind(const void * /*key*/, void *const * /*rootp*/,
-    int (* /*compar*/)(const void *, const void *));
-#endif
-
     newword = make_str_entry(name,name);
 #if 0
     r = dwarf_tfind(newword,&wordtree,str_compare_func);
@@ -964,12 +977,21 @@ void *dwarf_tfind(const void * /*key*/, void *const * /*rootp*/,
         exit(1);
     }
     key_deref = *(struct str_entry **)r;
+#ifdef REPORTING
+    reportcount.r_wordcount++;
+#endif /* REPORTING */
     if (key_deref == newword) {
         /* We added in this key */
         ++current_entry_number;
+#ifdef REPORTING
+        reportcount.r_uniquecount++;
+#endif /* REPORTING */
     } else {
         /*  We found an existing */
-        str_free_func(r);
+        str_free_func(newword);
+#ifdef REPORTING
+        reportcount.r_repeatcount++;
+#endif /* REPORTING */
     }
 }
 
@@ -1018,6 +1040,7 @@ run_timing_test(char *path)
         }
  
     }
+    print_counts();
     fclose(f);
     return 0;
 }
@@ -1027,16 +1050,20 @@ run_timing_test(char *path)
 static void
 readargs(int argc, char **argv)
 {
+    int i = 1;
     if (argc < 2) {
         /* No arguments, take defaults. */
         return;
     }
-    if (!strcmp(argv[1],"--std")) {
+    if (!strcmp(argv[i],"--std")) {
         runstandardtests = 1;
+        ++i;
+        
     }
-    if (argc > 2) {
-        wordspath = argv[2];
+    if (i >= argc) {
+        return;
     }
+    wordspath = argv[i];
     return;
 }
 
@@ -1054,6 +1081,9 @@ main(int argc, char **argv)
         printf("FAIL std tests");
     }
     /* Do extra tests here */
+#ifdef REPORTING
+    reportcount = zerorc;
+#endif /* REPORTING */
     if (wordspath) {
         init_word_tree();
         run_timing_test(wordspath);

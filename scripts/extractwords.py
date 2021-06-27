@@ -4,6 +4,9 @@
 import sys
 
 splist = [
+"\f(CW",
+"\fI",
+"\fP",
 ":",
 ";",
 ")",
@@ -44,6 +47,8 @@ def seemsaname(wd):
     c = wd[0]
     if not okfirst(c):
         return False
+    # Maybe check length, say 1 character
+    # long things are not words?
     return True
 
 def rmspecial(line):
@@ -54,7 +59,6 @@ def rmspecial(line):
     return line
 
 def myreadin(name):
-    l = []
     try:
         file = open(name, "r")
     except IOError:

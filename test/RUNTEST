@@ -1,23 +1,5 @@
 #!/bin/sh 
-# test2 is supposed to fail, do not expect success.
-#  With -byvalue it gets one error, without -byvalue it gets two.
-echo "start at " `date`
-# test17 is also supposed to fail, it adds 8 twice.
-myexit=0
-#The following line assumes the test cases have been
-#placed in a directory named 'testcases' and
-#that the .gz versions expanded.
-#The tsearch test data is in the 
-#libdwarf regression tests (available from sourceforge)
-#in the directory
-#     tsearchtests
-# It's appropriate to copy the tests from regressiontests
-# into 'testcases'
-# Not change what b refers to.
-# gunzip the .gz files in testcases, not in regressiontets
-# Note that the output file testpass and the basline
-# testcases/testpass.base # are filled with pointers as hex
-# values so  we transform those below before diff-ing.
+# Run this in the test directory.
 #
 savetemps=n
 rmtemps() {
@@ -27,18 +9,30 @@ rmtemps() {
 }
 rmtemps
 stsecs=`date '+%s'`
-echo "Results are in file testpass"
 
-echo "Start tsearch tests"  >testpass
-date >>testpass
-pwd >> testpass
-echo >> testpass
-for opts in "-std" "testwords"
+echo "Start tsearch tests"
+date 
+x=`pwd` 
+if [ ! -f RUNTEST ]
+then
+   echo "Run RUNTEST in the test directory, not in "
+   pwd
+   exit 1
+fi
+cd ../src
+make
+cd $x
+pwd 
+echo 
+# add --std to run basic correctness tests.
+#for opts in "--std" "testwords"
+for opts in "testwords"
 do
   for app  in  ../src/binarysearch ../src/eppingerdel ../src/balancedsearch ../src/redblack ../src/gnusearch ../src/hashsearch
+#  for app  in  ../src/binarysearch
   do
     name=`basename  $app`
-    echo '====' $name $opts '====' >>testpass 
-    $app $opts                     >>testpass
+    echo "==== $app $opts ===="
+    /usr/bin/time $app $opts  
   done
 done
