@@ -101,9 +101,10 @@ dwarf_initialize_search_hash( void **treeptr,
     return *treeptr;
 }
 
-/* For debugging.  Prints the level number and indents 1 space
-   per level.   That won't work very well for a deep tree, so perhaps
-   we should clamp at some number of indent spaces? */
+/*  For debugging.  Prints the level number and indents 1 space
+    per level.   That won't work very well for a deep tree,
+    so perhaps we should clamp at some number of indent
+    spaces? */
 static void printlevel(int level)
 {
     int len = 0;

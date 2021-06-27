@@ -99,9 +99,9 @@ dwarf_initialize_search_hash( void **treeptr,
     return *treeptr;
 }
 
-/* For debugging.  Prints the level number and indents 1 space
-   per level.   That won't work very well for a deep tree, so perhaps
-   we should clamp at some number of indent spaces? */
+/*  For debugging.  Prints the level number and indents 1 space
+    per level.   That won't work very well for a deep tree, so perhaps
+    we should clamp at some number of indent spaces? */
 static void printlevel(int level)
 {
     int len = 0;
@@ -117,8 +117,9 @@ static void printlevel(int level)
     }
 }
 
-/* For debugging. This prints the nodes with the parent (in each case)
-   in between the children.  So it is a tree with root at the left. */
+/*  For debugging. This prints the nodes with the parent
+    (in each case) in between the children.  So it is a
+    tree with root at the left. */
 static void
 dumptree_inner(const struct ts_entry *t,
     char *(* keyprint)(const void *),

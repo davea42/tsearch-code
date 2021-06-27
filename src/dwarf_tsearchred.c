@@ -177,8 +177,8 @@ printnode(struct ts_entry*n)
     return b;
 }
 
-/* For debugging. Use this to call dumptree_inner
-   from inside this file. */
+/*  For debugging. Use this to call dumptree_inner
+    from inside this file. */
 static char *
 v_keyprint(const void *l)
 {
@@ -190,9 +190,10 @@ v_keyprint(const void *l)
     return buf;
 }
 #endif /* DEBUG ONLY */
-/* Prints the level number and indents 1 space
-   per level.   That won't work very well for a deep tree, so perhaps
-   we should clamp at some number of indent spaces? */
+/*  Prints the level number and indents 1 space
+    per level.   That won't work very well for a deep tree,
+    so perhaps we should clamp at some number of
+    indent spaces? */
 static void printlevel(int level)
 {
     int len = 0;
@@ -642,10 +643,10 @@ balance( struct ts_entry *h)
     return h;
 }
 
-/* Kindle Location 8154. */
-/* This finds the min record that findmin will find and
-   delete. Meaning the record with llink NULL, descending
-   left links. */
+/*  Kindle Location 8154. */
+/*  This finds the min record that findmin will find and
+    delete. Meaning the record with llink NULL, descending
+    left links. */
 static struct ts_entry *
 findmin(struct ts_entry *h)
 {

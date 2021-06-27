@@ -25,9 +25,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-/* __USE_GNU exposes the GNU tdestroy() function, a
-   function that is not mentioned by the Single Unix
-   Specification. */
+/*  __USE_GNU exposes the GNU tdestroy() function, a
+    function that is not mentioned by the Single Unix
+    Specification. */
 #define __USE_GNU 1
 #include <search.h>
 

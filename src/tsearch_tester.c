@@ -814,7 +814,7 @@ standard_tests(void)
             g_hideactions,0,0);
         errcount += applyby(&sequence2[0],"Sequence 2, a",
             g_hideactions,0,0);
-    } else 
+    } else
     {
         errcount += applyby(&sequence2[0],"Sequence 2, b",
             g_hideactions,0,0);
@@ -829,12 +829,12 @@ standard_tests(void)
 /* ============begin large test for timing===========*/
 #ifdef REPORTING
 struct reportdata_s {
-   unsigned r_wordcount;
-   unsigned r_uniquecount;
-   unsigned r_repeatcount;
+    unsigned r_wordcount;
+    unsigned r_uniquecount;
+    unsigned r_repeatcount;
 } reportcount;
 struct reportdata_s zerorc;
-static void 
+static void
 print_counts(void)
 {
     printf("Counts: words: %u uniqwords %u repeatcount %u\n",
@@ -843,7 +843,7 @@ print_counts(void)
         reportcount.r_repeatcount);
 }
 #else /* !REPORTING */
-static void 
+static void
 print_counts(void)
 {
     return;
@@ -898,7 +898,7 @@ hash(unsigned char * str)
 static DW_TSHASHTYPE
 str_hashfunc(const void *keyp)
 {
-    const struct str_entry *l = 
+    const struct str_entry *l =
         (struct str_entry *)keyp;
     return hash(l->str_key);
 }
@@ -948,13 +948,13 @@ void *wordtree = 0;
 static void
 init_word_tree(void)
 {
-     INITTREE(wordtree,str_hashfunc);
+    INITTREE(wordtree,str_hashfunc);
 }
 static void
 destroy_word_tree(void)
 {
-     dwarf_tdestroy(wordtree,str_free_func);
-     wordtree = 0;
+    dwarf_tdestroy(wordtree,str_free_func);
+    wordtree = 0;
 }
 static void
 insert_word_in_tree(char *name)
@@ -967,8 +967,8 @@ insert_word_in_tree(char *name)
 #if 0
     r = dwarf_tfind(newword,&wordtree,str_compare_func);
     if (r) {
-       str_free_func(r); /* wrong? */
-       return;
+        str_free_func(r); /* wrong? */
+        return;
     }
 #endif
     r = dwarf_tsearch(newword,&wordtree,str_compare_func);
@@ -998,15 +998,15 @@ insert_word_in_tree(char *name)
 static size_t
 find_size_of_chars(char *fsc_buf)
 {
-     char *cp = fsc_buf;
-     size_t len = 0;
-     int c = *cp;
-     while (c && c != ' ' && c != '\n') {
-         ++len;
-         ++cp;
-         c = *cp;
-     }
-     return len;
+    char *cp = fsc_buf;
+    size_t len = 0;
+    int c = *cp;
+    while (c && c != ' ' && c != '\n') {
+        ++len;
+        ++cp;
+        c = *cp;
+    }
+    return len;
 }
 
 static char readbuf[1000];
@@ -1032,13 +1032,13 @@ run_timing_test(char *path)
             /* ERROR */
             printf("Read error, giving up\n");
             exit(1);
-        } 
+        }
         readlen = find_size_of_chars(readbuf);
         readbuf[readlen] = 0;
         if (readbuf[0]) {
             insert_word_in_tree(readbuf);
         }
- 
+
     }
     print_counts();
     fclose(f);
@@ -1058,7 +1058,7 @@ readargs(int argc, char **argv)
     if (!strcmp(argv[i],"--std")) {
         runstandardtests = 1;
         ++i;
-        
+
     }
     if (i >= argc) {
         return;
