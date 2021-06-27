@@ -25,8 +25,8 @@ cd $x
 pwd 
 echo 
 # add --std to run basic correctness tests.
-#for opts in "--std" "testwords"
-for opts in "testwords"
+#for opts in "--std" "testwords" "sortedwords"
+for opts in "testwords" "sortedwords"
 do
   for app  in  ../src/binarysearch ../src/eppingerdel ../src/balancedsearch ../src/redblack ../src/gnusearch ../src/hashsearch
 #  for app  in  ../src/binarysearch
