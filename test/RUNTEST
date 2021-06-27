@@ -24,7 +24,7 @@ make
 cd $x
 pwd 
 echo 
-# add --std to run basic correctness tests.
+# use --std to run basic correctness tests.
 #for opts in "--std" "testwords" "sortedwords"
 for opts in "testwords" "sortedwords"
 do
@@ -36,3 +36,11 @@ do
     /usr/bin/time $app $opts  
   done
 done
+cd ..
+sh scripts/CLEANUP
+if [ $? -ne 0 ]
+then
+  echo "file cleanup failed!"
+  exit 1
+fi
+exit 0
