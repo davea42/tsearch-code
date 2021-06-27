@@ -398,7 +398,8 @@ as follows.
 
 I think the GNU hsearch_r interfaces are a fine
 approach and could be extended to tsearch().  But
-I propose something slightly different.
+I suggest something slightly different.
+tse*)_
 
 #define TSE_OK 1
 #define TSE_MEM 2
@@ -410,10 +411,10 @@ I propose something slightly different.
 struct tsearch_base; /* opaque struct, content defined by
    the search code, content not made public */
 
-/* you define comparison function */
+/* you define comparison function with this prototype */
 int compare_func(void *l, void*r); 
 
-/* you define free function */
+/* you define free function with this prototype */
 int free_func(void *n);
 
 None of the proposed interfaces touch errno.
@@ -425,7 +426,7 @@ Here we present the compare func and free_func
 just once (quite unlike normal tsearch,
 and maybe not the best idea).
 
-int tcreate(struct tsearch_base **base,compare_func,free_func)
+int tsecreate(struct tsearch_base **base,compare_func,free_func)
     allocate a struct_tsearch_base record and puts a pointer to
     it in *base. Records the compare and free_func pointers.
     A call on this by uses is a requirement .
@@ -436,7 +437,7 @@ int tcreate(struct tsearch_base **base,compare_func,free_func)
         internal problem.
     TSE_OK if the base was created (allocated).
 
-int tsearch(void *key,struct tsearch_base *base);
+int tsesearch(void *key,struct tsearch_base *base);
     returns:
     TSE_MEM if out of memory.
     TSE_ERR if something wrong with an argument or an
@@ -445,7 +446,7 @@ int tsearch(void *key,struct tsearch_base *base);
         already.
     TSE_OK if new record added.
 
-int tfind(void *key,struct tsearch_base *base void **foundrec);
+int tsefind(void *key,struct tsearch_base *base void **foundrec);
     returns:
     TSE_OK if record returned in *foundrec
        (up to you to free key)
@@ -454,15 +455,21 @@ int tfind(void *key,struct tsearch_base *base void **foundrec);
     TSE_NOTFOUND if not found.
        (up to you to free key)
 
-int tdelete(void *key,struct tsearch_base *base,void **keyout);
-    If successful, tdelete deletes the record key identifies
-    and returns that record's recorded key through *keyout.
+int tsedelete(void *key,struct tsearch_base *base,void **keyout);
+    If successful, tdelete deletes the record identified by key and
+    and returns the actual record's recorded key through *keyout.
     So if a free()or other action is required you can take
     that action.
-    You must free key.
+
+    If key is a malloc-ed instance (not a key in the tree) you will
+    clean up key and keyout.
+ 
+    If key is a literal instance (a key in the tree) then
+    key and keyout be the same pointer value, so clean up just one.
 
     The 'base' struct tsearch_base record is NOT freed, 
     it remains, whether the tree has any records left or not.
+    see tdestroy() to clean up.
 
     returns:
     TSE_NOTFOUND if key not found.
@@ -471,7 +478,7 @@ int tdelete(void *key,struct tsearch_base *base,void **keyout);
     TSE_ERR if something wrong with an argument or an
         internal problem.
 
-int twalk(struct tsearch_base *base, 
+int tsewalk(struct tsearch_base *base, 
     int (* /*action*/)(const void * /*nodep*/,
     const DW_VISIT  /*which*/,
     const int  /*depth*/)
@@ -487,7 +494,7 @@ int twalk(struct tsearch_base *base,
     TSE_OK if all is well.
     TSE_STOP if an action function call returned TSE_STOP.
 
-int tsize(struct tsearch_base *base,unsigned long*count_out);
+int tsesize(struct tsearch_base *base,unsigned long*count_out);
     Stores a count of the records currently recorded
     in the tree in *count_out.
 
@@ -496,7 +503,7 @@ int tsize(struct tsearch_base *base,unsigned long*count_out);
     TSE_OK if all is well.
     
 
-int tdestroy(struct tsearch_base **base);
+int tsedestroy(struct tsearch_base **base);
     A call is a requirement on users -- to free up the tree space.
     Calls free_func  on each node in the tree and
     frees all tree memory and does 
