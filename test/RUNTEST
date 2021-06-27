@@ -33,7 +33,7 @@ echo "Start tsearch tests"  >testpass
 date >>testpass
 pwd >> testpass
 echo >> testpass
-for opts in "-std"
+for opts in "-std" "testwords"
 do
   for app  in  ../src/binarysearch ../src/eppingerdel ../src/balancedsearch ../src/redblack ../src/gnusearch ../src/hashsearch
   do
@@ -42,4 +42,3 @@ do
     $app $opts                     >>testpass
   done
 done
-

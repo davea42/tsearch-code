@@ -87,7 +87,6 @@ struct example_tentry {
     field is set to 0 (NULL). */
     char * mt_name;
 };
-
 /*  Used to hold test data.
     It would be a much better testing regime
     to add two flags here. One indicating pass/fail
@@ -282,6 +281,8 @@ static struct myacts sequential64[] = {
 };
 
 static int runstandardtests = 0;
+static char *wordspath = 0;
+/* ============begin correctness test ===========*/
 
 static int
 get_record_id(enum insertorder ord,int indx)
@@ -387,22 +388,6 @@ walk_entry(const void *mt_data,DW_VISIT x,int level)
         m->mt_key,m->mt_name);
     return;
 }
-#if 0
-static void
-value_only_walk_entry(const void *data,DW_VISIT x,int level)
-{
-    VALTYPE val =  (VALTYPE)(uintptr_t)data;
-    printlevel(level);
-    printf("Walk on node %s 0x%lu\n",
-        x == dwarf_preorder?"preorder":
-        x == dwarf_postorder?"postorder":
-        x == dwarf_endorder?"endorder":
-        x == dwarf_leaf?"leaf":
-        "unknown",
-        (unsigned long)val);
-    return;
-}
-#endif
 
 #ifndef LIBC_TSEARCH
 static char *
@@ -413,17 +398,6 @@ mt_keyprint(const void *v)
         (const struct example_tentry *)v;
     buf[0] = 0;
     snprintf(buf,sizeof(buf),"0x%08x",(unsigned)mt->mt_key);
-    return buf;
-}
-
-static char *
-value_keyprint(const void *v)
-{
-    VALTYPE val = (VALTYPE)(uintptr_t)v;
-    static char buf[50];
-    buf[0] = 0;
-    snprintf(buf,sizeof(buf),"0x%08lx (%lu)",(unsigned long)val,
-        (unsigned long)val);
     return buf;
 }
 #endif /* LIBC_TSEARCH */
@@ -752,30 +726,6 @@ applybypointer(struct myacts *m,
 }
 
 
-#ifdef HASHSEARCH
-static DW_TSHASHTYPE
-value_hashfunc(const void *keyp)
-{
-    VALTYPE up = (VALTYPE )(uintptr_t)keyp;
-    return up;
-}
-#endif /* HASHFUNC */
-#if 0
-static int
-value_compare_func(const void *l, const void *r)
-{
-    VALTYPE lp = (VALTYPE)(uintptr_t)l;
-    VALTYPE rp = (VALTYPE)(uintptr_t)r;
-    if (lp < rp) {
-        return -1;
-    }
-    if (lp > rp) {
-        return 1;
-    }
-    return 0;
-}
-#endif
-
 static int
 standard_tests(void)
 {
@@ -874,32 +824,206 @@ standard_tests(void)
     }
     return errcount;
 }
+/* ============end correctness test ===========*/
+/* ============begin large test for timing===========*/
+unsigned current_entry_number = 0;
+struct str_entry {
+    char *   str_key;
+    unsigned str_entrynumber;
+    char *   str_name;
+};
+static struct str_entry *
+make_str_entry(char *key ,char *name)
+{
+    struct str_entry *mt =
+        (struct str_entry *)calloc(
+            sizeof(struct str_entry),1);
+    if (!mt) {
+        printf("calloc fail\n");
+        exit(1);
+    }
+    mt->str_key = strdup(key);
+    mt->str_entrynumber = current_entry_number;
+    if (name) {
+        mt->str_name = strdup(name);
+    }
+    return mt;
+}
+static void
+str_free_func(void *str_data)
+{
+    struct str_entry *m = str_data;
+    if (!m) {
+        return;
+    }
+    free(m->str_name);
+    free(m->str_key);
+    free(str_data);
+    return;
+}
+#ifdef HASHSEARCH
+/* "Bernstein hash function" or the "DJB hash function" */
+static uint32_t /* must be a 32 - bit integer type */
+hash(unsigned char * str)
+{
+    uint32_t hash = 5381;
+    int c  = 0;
+    while ((c = *str++)) {
+        hash = hash * 33 + c ;
+    }
+    return hash;
+}
+static DW_TSHASHTYPE
+str_hashfunc(const void *keyp)
+{
+    const struct str_entry *l = 
+        (struct str_entry *)keyp;
+    return hash(l->str_key);
+}
+
+#endif /* HASHSEARCH */
+static int
+str_compare_func(const void *l, const void *r)
+{
+    const struct str_entry *ml = (struct str_entry *)l;
+    const struct str_entry *mr = (struct str_entry *)r;
+    
+    return  strcmp(ml->str_key,mr->str_key);
+}
+#if 0
+static void
+str_walk_entry(const void *str_data,DW_VISIT x,int level)
+{
+    const struct str_entry *m =
+        *(const struct str_entry **)str_data;
+    printlevel(level);
+    printf("Walk on node %s %s entrynum %u %s  \n",
+        x == dwarf_preorder?"preorder":
+        x == dwarf_postorder?"postorder":
+        x == dwarf_endorder?"endorder":
+        x == dwarf_leaf?"leaf":
+        "unknown",
+        m->str_key,m->str_entrynumber,m->str_name);
+    return;
+}
+#endif /* 0 */
+#if 0
+#ifndef LIBC_TSEARCH
+static char buf[1000];
+static char *
+str_keyprint(const void *v)
+{
+    const struct str_entry *str =
+        (const struct str_entry *)v;
+    buf[0] = 0;
+    snprintf(buf,sizeof(buf),"%s",str->str_key);
+    return buf;
+}
+#endif /* LIBC_TSEARCH */
+#endif /* 0 */
+
+void *wordtree = 0;
+
+static void
+init_word_tree(void)
+{
+     INITTREE(wordtree,str_hashfunc);
+}
+static void
+destroy_word_tree(void)
+{
+     dwarf_tdestroy(wordtree,str_free_func);
+     wordtree = 0;
+}
+static void
+insert_word_in_tree(char *name)
+{
+    struct str_entry *newword = 0;
+    void * r = 0;
+    struct str_entry *key_deref = 0;
 
 #if 0
-static int
-getaddr(const char *in, unsigned long *addrout)
-{
-    unsigned long int res = 0;
+void *dwarf_tsearch(const void * /*key*/, void ** /*rootp*/,
+    int (* /*compar*/)(const void *, const void *));
 
-    errno = 0;
-    res = strtoul(in,0,0);
-    if (errno) {
-        return 1;
+void *dwarf_tfind(const void * /*key*/, void *const * /*rootp*/,
+    int (* /*compar*/)(const void *, const void *));
+#endif
+
+    newword = make_str_entry(name,name);
+#if 0
+    r = dwarf_tfind(newword,&wordtree,str_compare_func);
+    if (r) {
+       str_free_func(r); /* wrong? */
+       return;
     }
-    *addrout = res;
+#endif
+    r = dwarf_tsearch(newword,&wordtree,str_compare_func);
+    if (!r) {
+        printf("tsearch failed. Something wrong\n");
+        exit(1);
+    }
+    key_deref = *(struct str_entry **)r;
+    if (key_deref == newword) {
+        /* We added in this key */
+        ++current_entry_number;
+    } else {
+        /*  We found an existing */
+        str_free_func(r);
+    }
+}
+
+static size_t
+find_size_of_chars(char *fsc_buf)
+{
+     char *cp = fsc_buf;
+     size_t len = 0;
+     int c = *cp;
+     while (c && c != ' ' && c != '\n') {
+         ++len;
+         ++cp;
+         c = *cp;
+     }
+     return len;
+}
+
+static char readbuf[1000];
+static int
+run_timing_test(char *path)
+{
+    FILE *f = 0;
+    size_t readlen = 0;
+
+    f = fopen(path,"r");
+    if (!f) {
+        printf("Cannot open %s, Giving up.\n",path);
+        exit(1);
+    }
+    for (;;) {
+        char *res = 0;
+
+        res = fgets(readbuf,sizeof(readbuf),f);
+        if (!res) {
+            if (feof(f)) {
+                break;
+            }
+            /* ERROR */
+            printf("Read error, giving up\n");
+            exit(1);
+        } 
+        readlen = find_size_of_chars(readbuf);
+        readbuf[readlen] = 0;
+        if (readbuf[0]) {
+            insert_word_in_tree(readbuf);
+        }
+ 
+    }
+    fclose(f);
     return 0;
 }
 
-static void
-print_usage(const char *a, const char *b,const char *app)
-{
-    fprintf(stderr,"%s : %s\n",a,b);
-    fprintf(stderr,"run as\n");
-    fprintf(stderr,"  %s [-std] [textfile]...\n",app);
-    exit(1);
-}
-#endif
 
+/* ============end large test for timing===========*/
 static void
 readargs(int argc, char **argv)
 {
@@ -910,7 +1034,9 @@ readargs(int argc, char **argv)
     if (!strcmp(argv[1],"--std")) {
         runstandardtests = 1;
     }
-    /* Now look for a list of files. Soon. */
+    if (argc > 2) {
+        wordspath = argv[2];
+    }
     return;
 }
 
@@ -928,7 +1054,11 @@ main(int argc, char **argv)
         printf("FAIL std tests");
     }
     /* Do extra tests here */
-    
+    if (wordspath) {
+        init_word_tree();
+        run_timing_test(wordspath);
+        destroy_word_tree();
+    }
     if (errcount) {
         exit(1);
     }

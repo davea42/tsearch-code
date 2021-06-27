@@ -1,0 +1,16 @@
+#!/bin/bash
+rm -f src/balancedsearch
+rm -f 	src/binarysearch
+rm -f 	src/dwarf_tsearchbal.o
+rm -f 	src/dwarf_tsearchbin.o
+rm -f 	src/dwarf_tsearchepp.o
+rm -f 	src/dwarf_tsearchhash.o
+rm -f 	src/dwarf_tsearchred.o
+rm -f 	src/eppingerdel
+rm -f 	src/gnusearch
+rm -f 	src/hashsearch
+rm -f 	src/redblack
+rm -f 	src/tsearch_testergnu.o
+rm -f 	src/tsearch_testerhash.o
+rm -f 	src/tsearch_testerstd.o
+

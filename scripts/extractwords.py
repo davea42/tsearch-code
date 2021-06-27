@@ -44,7 +44,6 @@ def seemsaname(wd):
     c = wd[0]
     if not okfirst(c):
         return False
-    print("dadebug WORD  ",wd)
     return True
 
 def rmspecial(line):
