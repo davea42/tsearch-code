@@ -1,0 +1,9 @@
+November 27, 2021
+  These sources implement several versions of tree search
+  code using the original UNIX function declarations
+  but adding new functions to make the code more
+  complete.
+
+  Now altering the build etc to be in more standard form.
+  Changing versions to use semantic versioning.
+  

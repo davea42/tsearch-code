@@ -1,6 +1,6 @@
 David Anderson.  
 Written January  2014
-Updated June 2021
+Updated November 2021
 
 This is not a library.
 It is a collection of implementations of
@@ -81,7 +81,8 @@ but what if the deleted node was the root?
 ================== LICENSING:
 
 I wanted this to be usable in any context, hence the use of
-the BSD open-source license.
+the FreeBSD open-source license (also known as
+2 clause BSD).
 
 ================== INTERFACE ODDITIES:
 
