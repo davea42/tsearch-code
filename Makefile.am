@@ -1,4 +1,11 @@
+### Copyright (C) David Anderson
+### This file is public domain and can be freely used or copied.
+
 CLEANFILES = config.h.in~ junk*
+
+ACLOCAL_AMFLAGS = -I m4
+SUBDIRS = src
+
 
 MAINTAINERCLEANFILES = \
 Makefile.in \
