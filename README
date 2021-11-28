@@ -20,26 +20,13 @@ Below see:
 In June 2021 this source moved to its own git project
 on github.com.
 
-In 2013 I realized I could simplify some code in libdwarf
-(another project) by removing some complicated and messy
-special memory allocation code.  Substituting by use of
-malloc/free and a table of used values.  The used-values needed
-to a preserve a special feature of the original allocations
-related to a special handle: any allocations would be freed
-by closing the special handle.
-
-So I decided to implement various searches (mostly tree
-searches) using the tsearch interface definitions.
-I wrote these using a dwarf_ prefix to distinguish
+I decided to implement various searches (mostly tree
+searches) using the traditional UNIX/Linux tsearch
+interface definitions as libdwarf needed a good
+search mechanism..
+Using a dwarf_ prefix to distinguish
 these from any libc implementation and to make the
 source fit in easily with libdwarf conventions.
-
-I added a tsearch() implementation using hashing too.
-The GNU-only hsearch() function  does not let the hash grow
-(the tsearch() hash here grows automatically as needed)
-and has no hdelete() or hwalk() capability, so hsearch() and
-friends did not seem like a good interface set even though
-the GNU-designed hsearch_r() interface set is nicely designed.
 
 The attached C code is a small set of implementations of
 C search code.  Based on algorithms in Knuth Volume 3
@@ -80,28 +67,56 @@ but what if the deleted node was the root?
 
 ================== LICENSING:
 
-I wanted this to be usable in any context, hence the use of
-the FreeBSD open-source license (also known as
-2 clause BSD).
+The FreeBSD open-source license (also known as
+2 clause BSD) makes it easy to use this code
+in any context.
 
 ================== INTERFACE ODDITIES:
 
+For almost all users a struct (lets call it MYSTR)  has to be
+malloc'd and filled in, whether for tfind, tdelete
+,tsearch.
+
 It's not really easy to understand precisely what any call did.
-If a call is returning
-        Non-null return
-         tfind:
-	  success, action succeeded
-         tsearch returns one of:
-          tsearch success - added record
-          tsearch success - record already in tree
-           so nothing added or changed.
-         tdelete:
-	  success, action succeeded
-        Null return:
-         fail due to internal error or improper argument.
-         requested action impossible 
-            (tfind() fails to find a record, or tdelete() fails
-            to find the record to delete)
+tfind:
+ non-null returns: success, action succeeded
+    The returned pointer to a MYSTR is the value.
+    Free MYSTR
+ null returns: Not found.
+    Free MYSTR
+
+tsearch:
+ null return means an error occurred.
+    Free MYSTR
+ non-null return 
+    if the returnval == MYSTR:
+      tsearch success - added record
+      So do not free MYSTR!
+    else
+      tsearch success - record already in tree
+      so nothing added or changed.
+      Free MYSTR.
+
+tdelete:
+ If the passed-in pointer to the root pointer
+   now points to a NULL value the tree is now empty.
+   This information is of marginal value.
+ non-null return  
+    success, action succeeded
+    The return value is not very useful, its content
+      is not easily described.
+    Free MYSTR
+ Null return:
+    Fail due to internal error or improper argument.
+    Or it means the delete suceeded and the tree
+    is now empty.
+    free MYSTR
+
+When using the hash search, tdelete return of Null
+does not necessarily mean the tree (well, we
+just call it that even for hashing) is empty, and
+the passed-in pointer to the root pointer
+does not point to NULL.
 
 Speaking of C here, so, there is no try/catch available.
 
@@ -133,12 +148,14 @@ because it purports to return a pointer to another record
 than the one deleted, yet no such record necessarily exists,
 but if something is deleted a non-null pointer is returned.
 
-The hash version requires use of the new function
+The hash version requires use of the function
 dwarf_initialize_search_hash() to provide a hashing
 function. And the hash version does not set the root pointer
 to NULL on tdelete() of the last record, since that would
 result in losing the hashing function pointer.  Use tdestroy()
-to free up any remaining space.
+to free up any remaining space. The other versions implement
+that function and the function does nothing for those.
+
 
 dwarf_tdump() is an invention and unique to this code.  It is
 for debugging. It prints a representation of the data in the
