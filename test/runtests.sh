@@ -20,29 +20,17 @@ fi
 srcdir=$top_srcdir/test
 loc=`pwd`
 ct=0
-if [ ! -x $top_blddir/src/readelfobj ]
+if [ ! -f $top_blddir/src/redblacksearch ]
 then
-   echo "Build readelfobj and install it as $loc/../src/readelfobj to test"
+   echo "Build the search code to test"
    echo "No test done"
    exit 1
 fi
 
-
 echo "Start tsearch tests"
 date 
-x=`pwd` 
-if [ ! -f RUNTEST ]
-then
-   echo "Run RUNTEST in the test directory, not in "
-   pwd
-   exit 1
-fi
-cd ../src
-make
-cd $x
-pwd 
-echo 
-for opts in "--std" "testwords" "sortedwords"
+failcount=0
+for opts in "--std" "$srcdir/testwords" "$srcdir/sortedwords"
 do
   for app  in  $top_blddir/src/binarysearch $top_blddir/src/eppingerdel \
     $top_blddir/src/balancedsearch $top_blddir/src/redblacksearch \
@@ -50,7 +38,19 @@ do
   do
     name=`basename  $app`
     echo "==== $app $opts ===="
-    /usr/bin/time $app $opts  
+    /usr/bin/time $app $opts  > testout
+    grep FAIL <testout >/dev/null
+    if [ $? -eq  0 ]
+    then
+        failcount=`expr $failcount + 1 `
+        cat testout
+    fi
   done
 done
+if [ $failcount -ne 0 ]
+then
+   echo "FAIL count $failcount"
+   exit 1
+fi
+echo PASS
 exit 0

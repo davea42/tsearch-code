@@ -315,7 +315,7 @@ make_example_tentry(unsigned k,char *name)
         (struct example_tentry *)calloc(
             sizeof(struct example_tentry),1);
     if (!mt) {
-        printf("calloc fail\n");
+        printf("FAIL calloc fail\n");
         exit(1);
     }
     mt->mt_key = k;
@@ -658,7 +658,7 @@ deleteonebypointer(void **tree, unsigned addr,int ct)
         mt_free_func(mt);
         mt_free_func(re3);
     } else {
-        printf("deleteonebypointer could not find rec %d ! "
+        printf("FAIL deleteonebypointer could not find rec %d ! "
             "error! addr"
             " 0x%lx\n",
             ct,(unsigned long)addr);
@@ -716,7 +716,7 @@ applybypointer(struct myacts *m,
             errcount += deleteonebypointer(&treesq1,m->addr_,ct);
             continue;
         }
-        printf("Fail applybypointer, bad action %s entry %d.\n",
+        printf("FAIL applybypointer, bad action %s entry %d.\n",
             msg,ct);
         return 1;
     }
@@ -860,7 +860,7 @@ make_str_entry(char *key ,char *name)
     struct str_entry *mt =
         (struct str_entry *)calloc(sizeof(struct str_entry),1);
     if (!mt) {
-        printf("calloc fail\n");
+        printf("FAIL calloc fail\n");
         exit(1);
     }
     mt->str_key = strdup(key);
@@ -1017,7 +1017,7 @@ run_timing_test(char *path)
 
     f = fopen(path,"r");
     if (!f) {
-        printf("Cannot open %s, Giving up.\n",path);
+        printf("FAIL Cannot open %s, Giving up.\n",path);
         exit(1);
     }
     for (;;) {
@@ -1029,7 +1029,7 @@ run_timing_test(char *path)
                 break;
             }
             /* ERROR */
-            printf("Read error, giving up\n");
+            printf("FAIL Read error, giving up\n");
             exit(1);
         }
         readlen = find_size_of_chars(readbuf);
@@ -1089,6 +1089,7 @@ main(int argc, char **argv)
         destroy_word_tree();
     }
     if (errcount) {
+        printf("FAIL tsearch test.\n");
         exit(1);
     }
     printf("PASS tsearch test.\n");
