@@ -9,17 +9,43 @@ tsearch functions copyrighted by the
 so it's easy for anyone to copy and use in their projects.
 
 Below see:
+================== BUILDING AND RUNNING TESTS
+================== HISTORY
 ================== WHY TSEARCH?
 ================== LICENSING:
 ================== INTERFACE ODDITIES:
 ================== IMPLEMENTATION ODDITIES:
 ================== OTHER DIRECTORIES:
-================== RUNNING TESTS
+================== BUILDING AND RUNNING TESTS
 ================== REFERENCES:
 
-In June 2021 this source moved to its own git project
-on github.com.
+================== BUILDING AND RUNNING TESTS
+The tests run on all five of the tsearch implementations
+provided and also one test runs using libc tsearch.
+For each of the six test programs there are three
+test data-sets. See test/runtest.sh
 
+If you have done git clone you need to
+set things up first, then we suggest
+building in a temporary directory to keep
+the source tree clean:
+    #Only need do this once, after clone.
+    cd /path/to/tsearch-code
+    sh autogen.sh
+
+    #For any build and test, to:
+    mkdir /tmp/tsbld
+    cd /tmp/tsbld
+    /path/to/tsearch-code/configure
+    make
+    #run the tests
+    make check
+
+Overall on an ordinary 3GHz 64Bit
+machine a run takes around seven minutes.
+
+
+================== HISTORY
 I decided to implement various searches (mostly tree
 searches) using the traditional UNIX/Linux tsearch
 interface definitions as libdwarf needed a good
@@ -28,10 +54,10 @@ Using a dwarf_ prefix to distinguish
 these from any libc implementation and to make the
 source fit in easily with libdwarf conventions.
 
-The attached C code is a small set of implementations of
+The attached C code is set of five implementations of
 C search code.  Based on algorithms in Knuth Volume 3
 (2nd Ed) and Sedgewick 4th Edition (see more detailed
-references below)..
+references below).
 
 All the code here is implemented by me. I have never read the
 source to any other implementations of the tsearch algorithms
@@ -47,7 +73,6 @@ here provides a tdestroy() for all the tree/hash function
 sets here.
 
 ================== WHY TSEARCH?
-
 The interfaces are of a well-known design.  While
 the interfaces are based on an obsolete style of writing
 interfaces, they are a known set.  So the routines provided
@@ -66,13 +91,11 @@ since it purports to return the parent of the deleted node,
 but what if the deleted node was the root?
 
 ================== LICENSING:
-
 The FreeBSD open-source license (also known as
 2 clause BSD) makes it easy to use this code
 in any context.
 
 ================== INTERFACE ODDITIES:
-
 For almost all users a struct (lets call it MYSTR)  has to be
 malloc'd and filled in, whether for tfind, tdelete
 ,tsearch.
@@ -127,7 +150,6 @@ walking the tree.
 We are staying with the standard interfaces.
 
 ================== IMPLEMENTATION ODDITIES:
-
 The code uses names like dwarf_tsearch() instead of just
 tsearch() so one can have both this tsearch() and GNU or
 a standard tsearch code available simultaneously with no
@@ -166,7 +188,6 @@ for me to move these files to another project as necessary.
 You will probably want to revise the #include set a little.
 
 ================== OTHER DIRECTORIES:
-
 testdata contains a set of sample allocations, where
 lines starting with 'a' mean add and 'd' means delete.
 These are used for testing the library code.
@@ -178,52 +199,6 @@ from running dwarfdump on real object files
 into the testcase/* format.
 It is unlikely you will find them much use
 except as starting points.
-
-================== RUNNING TESTS
-
-The test scheme should be revised to do each test 'right'
-and do something about those pointer values printed.
-But for now this is how it works.
-
-Getting started:
-   rm -rf testcases
-   cp -r ../regressiontests/tsearchtests
-   mv tsearchtests testcases
-   cd testcases
-   gunzip action-F-dwgenb-dwarfgen.log.gz     
-   gunzip action-f-v-v-irix64-libc.so.log.gz   
-   gunzip action-i-dwarf4-dd2g4.5dwarf-4.log.gz
-   gunzip action-l-irix64-libc.so.log.gz
-   cd ..
-All the files in testcases except two are
-just data for the tests.
-   testcases/testfail.base and testcases/testpass.base
-are baseline outputs and if what the test cases or
-dwarf_dump changes those are what need to be updated.
-
-All the tests are done by the script RUNTEST.
-   sh RUNTEST [-save]
-The -save option tells the script to save (rather
-than delete) the temp files it writes to.
-
-First tests run and are saved in 'testfail'
-Then that content (which includes passes and fails
-and all that is normal)
-  diff testfail testcases/testfail.base
-should show no differences.
-
-The second part involves the file testpass
-which takes a little longer. The message from the
-script suggests you inspect the difference with
-a graphical compare tool (I use fldiff) because
-most lines that appear involve printing pointers
-and of course those do not match between runs.
-The actual diff is on files with hex numbers
-transformed to 0xyyy so an overall PASS
-is normal..
-
-Overall on an ordinary 3GHz 64Bit
-machine a run takes around seven minutes.
 
 ================== REFERENCES:
 
