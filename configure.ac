@@ -201,6 +201,7 @@ AC_MSG_RESULT([${enable_sanitize}])
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
+test/Makefile
 ])
 
 AC_OUTPUT

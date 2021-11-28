@@ -4,7 +4,7 @@
 CLEANFILES = config.h.in~ junk*
 
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = src
+SUBDIRS = src test
 
 MAINTAINERCLEANFILES = \
 Makefile.in \
@@ -30,7 +30,7 @@ EXTRA_DIST = \
 COPYING \
 ChangeLog \
 ChangeLog2018 \
-ChangeLog2018 \
+ChangeLog2019 \
 ChangeLog2020 \
 NEWS \
 README \
