@@ -1,6 +1,7 @@
 /*
-   Copyright David Anderson 2010-2014.
+   Copyright David Anderson 2010-2021.
    This is free software.
+   This file is hereby placed in the Public Domain.
    Permission hereby granted for anyone to copy or
    use this code for any purpose without restriction.
    Attribution may be given or may not, it is your choice.

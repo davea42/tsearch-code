@@ -1,4 +1,4 @@
-/* Copyright (c) 2014, David Anderson
+/* Copyright (c) 2014-2021, David Anderson
 All rights reserved.
 
 Redistribution and use in source and binary forms, with
@@ -49,6 +49,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif /* HAVE_STDINT_H */
 #include <errno.h>
 #include "dwarf_tsearch.h"
+#include "dwarf_incl.h"
 
 
 /*  These defines rename the call targets to Unix standard

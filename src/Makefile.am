@@ -3,6 +3,8 @@
 
 MAINTAINERCLEANFILES = Makefile.in
 
+DISTCLEAN = 
+
 AUTOMAKE_OPTIONS = subdir-objects
 
 bin_PROGRAMS = libcsearch binarysearch balancedsearch \
@@ -11,6 +13,7 @@ bin_PROGRAMS = libcsearch binarysearch balancedsearch \
 balancedsearch_SOURCES = \
   tsearch_tester.c  \
   dwarf_tsearchbal.c \
+  dwarf_incl.h \
   dwarf_tsearch.h 
 
 libcsearch_SOURCES = \
@@ -21,21 +24,25 @@ libcsearch_CFLAGS = "-DLIBC_TSEARCH=1"
 binarysearch_SOURCES = \
   tsearch_tester.c  \
   dwarf_tsearchbin.c \
+  dwarf_incl.h \
   dwarf_tsearch.h 
 
 eppingerdel_SOURCES = \
   tsearch_tester.c  \
   dwarf_tsearchepp.c \
+  dwarf_incl.h \
   dwarf_tsearch.h 
 
 redblacksearch_SOURCES = \
   dwarf_tsearchred.c \
   tsearch_tester.c  \
+  dwarf_incl.h \
   dwarf_tsearch.h 
 
 hashsearch_SOURCES = \
   dwarf_tsearchhash.c \
   tsearch_tester.c  \
+  dwarf_incl.h \
   dwarf_tsearch.h 
 hashsearch_CFLAGS = "-DHASHSEARCH=1"
   
