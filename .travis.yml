@@ -20,6 +20,5 @@ before_script:
   - autoreconf -vif
 
 script: 
-  - ./configure --enable-wall && make && make check
+  - ./configure --enable-wall && make
   - cat test/test-suite.log
-
