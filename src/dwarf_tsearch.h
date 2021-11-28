@@ -62,6 +62,12 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DW_TSHASHTYPE uintptr_t
 #endif
 
+#ifdef HAVE_UNUSED_ATTRIBUTE
+#define  UNUSEDARG __attribute__ ((unused))
+#else
+#define  UNUSEDARG
+#endif
+
 /*  The DW_VISIT values passed back to you through
     the callback function in dwarf_twalk();
 */

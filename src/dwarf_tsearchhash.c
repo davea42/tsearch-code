@@ -59,11 +59,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 #include "config.h"
-#ifdef HAVE_UNUSED_ATTRIBUTE
-#define  UNUSEDARG __attribute__ ((unused))
-#else
-#define  UNUSEDARG
-#endif
 #include "stdlib.h" /* for free() etc */
 #include <stdio.h>  /* for printf() */
 #ifdef HAVE_STDINT_H

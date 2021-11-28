@@ -49,8 +49,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif /* HAVE_STDINT_H */
 #include <errno.h>
 #include "dwarf_tsearch.h"
-#include "dwarf_incl.h"
-
 
 /*  These defines rename the call targets to Unix standard
     names (or to nothing where there is no standard version).
