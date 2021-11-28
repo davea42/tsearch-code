@@ -88,7 +88,6 @@ VMAJ=v_maj
 AC_SUBST([VMAJ])
 
 AC_PROG_CC
-AC_PROG_CXX
 AC_PROG_CC_C_O
 
 PKG_PROG_PKG_CONFIG
@@ -144,7 +143,6 @@ AS_IF(
     ]
     )
 
-DWARF_CHECK_CXX_COMPILER_FLAGS([${cxx_compiler_flags}])
 DWARF_CHECK_C_COMPILER_FLAGS([${c_compiler_flags}])
 
 # unused attribute

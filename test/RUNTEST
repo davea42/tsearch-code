@@ -26,10 +26,9 @@ pwd
 echo 
 # use --std to run basic correctness tests.
 #for opts in "--std" "testwords" "sortedwords"
-for opts in "testwords" "sortedwords"
+for opts in "--std" "testwords" "sortedwords"
 do
-  for app  in  ../src/binarysearch ../src/eppingerdel ../src/balancedsearch ../src/redblack ../src/gnusearch ../src/hashsearch
-#  for app  in  ../src/binarysearch
+  for app  in  ../src/binarysearch ../src/eppingerdel ../src/balancedsearch ../src/redblacksearch ../src/hashsearch ../src/libcsearch 
   do
     name=`basename  $app`
     echo "==== $app $opts ===="

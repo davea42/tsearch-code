@@ -6,7 +6,6 @@ CLEANFILES = config.h.in~ junk*
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = src
 
-
 MAINTAINERCLEANFILES = \
 Makefile.in \
 aclocal.m4 \

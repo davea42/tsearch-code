@@ -5,51 +5,40 @@ MAINTAINERCLEANFILES = Makefile.in
 
 AUTOMAKE_OPTIONS = subdir-objects
 
-bin_PROGRAMS = tsearchstd binarysearch balancedsearch \
-   eppingerdel hashsearch   gnusearch redblacksearch
-
-TESTS = $(check_PROGRAMS) $(check_TESTS)
+bin_PROGRAMS = libcsearch binarysearch balancedsearch \
+   eppingerdel hashsearch redblacksearch
 
 balancedsearch_SOURCES = \
   tsearch_tester.c  \
   dwarf_tsearchbal.c \
-  dwarf_tsearch.h \
-  config.h 
+  dwarf_tsearch.h 
 
-tsearchstd_SOURCES = \
+libcsearch_SOURCES = \
   tsearch_tester.c  \
-  dwarf_tsearch.h \
-  config.h
+  dwarf_tsearch.h 
+libcsearch_CFLAGS = "-DLIBC_TSEARCH=1"
 
-binarysearch_SOURCES
+binarysearch_SOURCES = \
   tsearch_tester.c  \
-  dwarf_tsearchbin.c\
-  dwarf_tsearch.h \
-  config.h
+  dwarf_tsearchbin.c \
+  dwarf_tsearch.h 
 
 eppingerdel_SOURCES = \
   tsearch_tester.c  \
-  dwarf_tsearchepp.c\
-  dwarf_tsearch.h \
-  config.h
+  dwarf_tsearchepp.c \
+  dwarf_tsearch.h 
 
 redblacksearch_SOURCES = \
   dwarf_tsearchred.c \
   tsearch_tester.c  \
-  dwarf_tsearch.h \
-  config.h
+  dwarf_tsearch.h 
 
-hashsearch_SOURCES= \
+hashsearch_SOURCES = \
   dwarf_tsearchhash.c \
   tsearch_tester.c  \
-  dwarf_tsearch.h \
-  config.h
+  dwarf_tsearch.h 
+hashsearch_CFLAGS = "-DHASHSEARCH=1"
   
-gnusearch_SOURCES= \
-  tsearch_tester.c  \
-  dwarf_tsearch.h \
-  config.h
-
 EXTRA_DIST = \
 $(man_MANS) \
 $(check_TESTS) \
