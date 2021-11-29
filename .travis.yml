@@ -1,7 +1,6 @@
 langage: c
 os: linux
 dist: bionic
-cache: true
 
 compiler:
   - gcc
