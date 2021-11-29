@@ -13,7 +13,7 @@ tsearch functions copyrighted by the
 so it's easy for anyone to copy and use in their projects that
 are in C and need searchable trees at runtime.
 
-## Building and running testS
+## Building and running tests
 The tests run on all five of the tsearch implementations
 provided and also one test runs using libc tsearch.
 For each of the six test programs there are three
