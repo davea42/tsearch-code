@@ -1,4 +1,4 @@
-# This is tsearch-code README.md
+# This is tsearch-code README
 
 Written January  2014
 Updated November 2021
@@ -74,14 +74,6 @@ The tdestroy() function is available in GNU libc, but is
 not part of the standard tsearch() set, nor is tdestroy()
 defined in the Single Unix Specification.
 
-The hash version of tdelete() cannot always return a non-null
-value even if there are records left.  Not being a tree at
-all, it would cost runtime to provide a non-null return in
-some cases even when there are records left from tdelete().
-The return value from tdelete() is problematic in all versions,
-since it purports to return the parent of the deleted node,
-but what if the deleted node was the root?
-
 ## LICENSING:
 The FreeBSD open-source license (also known as
 2 clause BSD) makes it easy to use this code
@@ -141,7 +133,7 @@ walking the tree.
 
 We are staying with the standard interfaces.
 
-================== IMPLEMENTATION ODDITIES:
+## IMPLEMENTATION ODDITIES:
 The code uses names like dwarf_tsearch() instead of just
 tsearch() so one can have both this tsearch() and GNU or
 a standard tsearch code available simultaneously with no
@@ -154,6 +146,14 @@ The use of tsearch() and friends is a little tricky.
 That is just the way it is.  The best reference is the code
 in tsearch_tester.c, but see above for a plain text
 description.
+
+The hash version of tdelete() cannot always return a non-null
+value even if there are  records left.  Not being a tree at
+all, it would cost runtime to provide a non-null return in
+some cases even when there are records left from tdelete().
+The return value from tdelete() is problematic in all versions,
+since it purports to return the parent of the deleted node,
+but what if the deleted node was the root?
 
 Note the trivial set of #defines in tsearch_tester.c that
 result in a standard-based naming of the functions so
@@ -176,10 +176,8 @@ dwarf_tdump() is an invention and unique to this code.  It is
 for debugging. It prints a representation of the data in the
 tree or hash to stdout.
 
-You may want to revise the #include set a little.
-
-================== OTHER DIRECTORIES:
-testdata contains a set of sample allocations, where
+## OTHER DIRECTORIES:
+test contains a set of sample allocations, where
 lines starting with 'a' mean add and 'd' means delete.
 These are used for testing the library code.
 
@@ -190,8 +188,6 @@ from running dwarfdump on real object files
 into the testcase/* format.
 It is unlikely you will find them much use
 except as starting points.
-
-================== REFERENCES:
 
 Donald E Knuth, The Art of Computer Programming
 Volume 3, Second Edition. Section 6.2.2 Binary
