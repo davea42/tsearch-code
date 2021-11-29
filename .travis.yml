@@ -1,7 +1,7 @@
 langage: c
 os: linux
 dist: bionic
-cache: false
+cache: true
 
 compiler:
   - gcc
