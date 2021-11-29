@@ -10,7 +10,7 @@ tsearch functions copyrighted by the
 so it's easy for anyone to copy and use in their projects that
 are in C and need searchable trees at runtime.
 
-## BUILDING AND RUNNING TESTS
+## Building and running testS
 The tests run on all five of the tsearch implementations
 provided and also one test runs using libc tsearch.
 For each of the six test programs there are three
@@ -35,8 +35,10 @@ the source tree clean:
 Overall on an ordinary 3GHz 64Bit
 machine a run takes around seven minutes.
 
+## The tsearch variants
 
-## HISTORY
+
+## History
 I decided to implement various searches (mostly tree
 searches) using the traditional UNIX/Linux tsearch
 interface definitions as libdwarf needed a good
@@ -64,7 +66,7 @@ Non-GNU libc usually has no tdestroy().  The set of functions
 here provides a tdestroy() for all the tree/hash function
 sets here.
 
-## WHY TSEARCH?
+## Why tsearch?
 The interfaces are of a well-known design.  While
 the interfaces are based on an obsolete style of writing
 interfaces, they are a known set.  So the routines provided
@@ -74,12 +76,12 @@ The tdestroy() function is available in GNU libc, but is
 not part of the standard tsearch() set, nor is tdestroy()
 defined in the Single Unix Specification.
 
-## LICENSING:
+## Licensing
 The FreeBSD open-source license (also known as
 2 clause BSD) makes it easy to use this code
 in any context.
 
-## INTERFACE ODDITIES:
+## Interface oddities
 For almost all users a struct (lets call it MYSTR)  has to be
 malloc'd and filled in, whether for tfind, tdelete
 ,tsearch.
@@ -133,7 +135,7 @@ walking the tree.
 
 We are staying with the standard interfaces.
 
-## IMPLEMENTATION ODDITIES:
+## Implementation oddities
 The code uses names like dwarf_tsearch() instead of just
 tsearch() so one can have both this tsearch() and GNU or
 a standard tsearch code available simultaneously with no
@@ -176,7 +178,7 @@ dwarf_tdump() is an invention and unique to this code.  It is
 for debugging. It prints a representation of the data in the
 tree or hash to stdout.
 
-## OTHER DIRECTORIES:
+## Other directories
 test contains a set of sample allocations, where
 lines starting with 'a' mean add and 'd' means delete.
 These are used for testing the library code.
