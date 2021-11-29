@@ -1,3 +1,6 @@
+[![Travis Build
+Status](https://travis-ci.com/davea42/tsearch-code.svg?branch=master)](https://travis-ci.com/github/davea42/tsearch-code)
+
 # This is tsearch-code README.md
 
 Written January  2014
