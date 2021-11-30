@@ -49,12 +49,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#include "config.h"
-
-/* SN-Carlos: Windows specific */
-#if defined(_WIN32) && defined(HAVE_STDAFX_H)
-#include "stdafx.h"
-#endif /* HAVE_STDAFX_H */
 
 /*  The hashfunc return is now easily changed with
     cc -Duintptr_t or something. */

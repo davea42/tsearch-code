@@ -65,8 +65,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif /* HAVE_STDINT_H */
 #include <stdio.h> /* for printf */
 
-/*  This must match the types and print options
-    found in libdwarf.h.  */
 #define Dwarf_Unsigned unsigned long long
 #ifdef _WIN32
 #define DW_PR_DUx "I64x"

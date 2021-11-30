@@ -41,7 +41,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "config.h"
 #include <stdio.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 #ifdef HAVE_STDINT_H
@@ -56,7 +58,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef LIBC_TSEARCH
 #define _GNU_SOURCE /* for tdestroy */
 #define __USE_GNU   /* tdestroy */
+#ifdef HAVE_SEARCH_H
 #include <search.h>
+#endif /* HAVE_SEARCH_H */
 #define dwarf_tsearch(a,b,c) tsearch(a,b,c)
 #define dwarf_tfind(a,b,c) tfind(a,b,c)
 #define dwarf_tdelete(a,b,c) tdelete(a,b,c)

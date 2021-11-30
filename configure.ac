@@ -95,6 +95,7 @@ PKG_PROG_PKG_CONFIG
 ### Checks for libraries
 
 ### Checks for header files
+AC_CHECK_HEADERS([unistd.h stdint.h search.h])
 
 ### for use in casts to uint to avoid 32bit warnings.
 ### Also needed by C++ cstdint
@@ -104,14 +105,7 @@ AC_TYPE_UINT32_T dnl Needed for hash calculation
 ### Now we know uintptr_t is either in stdint.h or
 ### is defined in config.h by configure.
 
-# test Elf headers in the preprocessor path search
-# We need Elf.h defines like Ehdr32 and relocations
-# to read them with our local elf-section reader code.
-# On Solaris libelf.h has relocation defines we need.
-# so we check for libelf.h too.
 CPPFLAGS_save=${CPPFLAGS}
-# dwarfgen needs an actual libelf else it cannot be built.
-### we set $dwarf_with_libelf above.
 
 ### Checks for compiler characteristics
 
