@@ -722,11 +722,11 @@ applybypointer(struct myacts *m,
         }
         printf("FAIL applybypointer, bad action %s entry %d.\n",
             msg,ct);
+        dwarf_tdestroy(treesq1,mt_free_func);
         return 1;
     }
     dwarf_tdestroy(treesq1,mt_free_func);
     return errcount;
-
 }
 
 
