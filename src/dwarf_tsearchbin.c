@@ -329,7 +329,7 @@ void *
 dwarf_tfind(const void *key, void *const*headppin,
     int (*compar)(const void *, const void *))
 {
-    struct ts_entry *head = (struct ts_entry *)*headppin;
+    struct ts_entry *head = 0;
     struct ts_entry **proot = 0;
     struct ts_entry *root  = 0;
     struct ts_entry *p     = 0;
