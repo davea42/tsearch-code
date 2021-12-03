@@ -10,4 +10,8 @@ check:
 TESTS = ./runtests.sh
 AM_TESTS_ENVIRONMENT = DWTOPSRCDIR='$(top_srcdir)'; export DWTOPSRCDIR;
 
-EXTRA_DIST = 
+EXTRA_DIST = \
+BUILDWORDFILE \ 
+runtests.sh  \
+sortedwords  \
+testwords

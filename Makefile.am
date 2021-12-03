@@ -29,9 +29,6 @@ missing
 EXTRA_DIST = \
 COPYING \
 ChangeLog \
-ChangeLog2018 \
-ChangeLog2019 \
-ChangeLog2020 \
 NEWS \
 README \
 autogen.sh \
