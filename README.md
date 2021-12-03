@@ -4,7 +4,7 @@ Status](https://travis-ci.com/davea42/tsearch-code.svg?branch=master)](https://t
 # This is tsearch-code README.md
 
 Written January  2014
-Updated November 2021
+Updated December 2021
 
 This is not a library.  It is a collection of
 clean-room
@@ -24,7 +24,26 @@ If you have done git clone you need to set things up first,
 then we suggest building in a temporary directory to keep
 the source tree clean:
 
+#### Building from a release
 
+    Download the release from
+
+    https://github.com/davea42/tsearch-code
+
+and unpack
+
+    #For example:
+    tar xf tsearch-0.1.0.xz
+    cd  tsearch-0.1.0
+    ./configure --enable-wall
+    make
+    make check
+    #Building in a directory separate from
+    #the download also works
+
+
+    
+#### Building from a clone
     git clone https://github.com/davea42/tsearch-code
     #Only need do this once, after clone.
     cd /path/to/tsearch-code
