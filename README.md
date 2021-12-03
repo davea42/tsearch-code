@@ -7,6 +7,7 @@ Written January  2014
 Updated November 2021
 
 This is not a library.  It is a collection of
+clean-room
 implementations of tsearch functions copyrighted by the
 2-clause license ("Simplified BSD License" or "FreeBSD
 License") so it's easy for anyone to copy and use in
@@ -24,6 +25,7 @@ then we suggest building in a temporary directory to keep
 the source tree clean:
 
 
+    git clone https://github.com/davea42/tsearch-code
     #Only need do this once, after clone.
     cd /path/to/tsearch-code
     sh autogen.sh
@@ -41,6 +43,7 @@ Overall on an ordinary 3GHz 64Bit machine a run takes
 around seven minutes.
 
 ## History
+
 I decided to implement various searches (mostly tree
 searches) using the traditional UNIX/Linux tsearch
 interface definitions as libdwarf needed a good search
@@ -75,10 +78,11 @@ has poor performance if records are added in sorted order.
 
 Binary tree with Eppinger delete is nearly the same but
 deletes are modified to affect the tree structure for
-improved performance. Knuth mentions this variation.
+improved performance. Knuth describes this variation.
 Its performance is essentially like binary tree.
 
-Balanced binary tree is the sort of canonical form and is
+Balanced binary tree is the sort of canonical form
+of trees people use and is
 what Knuth describes in detail.
 
 Red black tree is an invention of Sedgewick which attempts
@@ -107,7 +111,10 @@ For almost all users a struct (lets call it MYSTR)  has
 to be malloc'd and filled in, whether for tfind, tdelete,
 or tsearch.
 
-It's not really easy to understand precisely what any call did.
+It's harder than it needs to be to understand precisely what any call did.
+There is no specific way to know if the functions are really
+returning because of an error.
+
     tfind:
         non-null returns: success, action succeeded
             The returned pointer to a MYSTR is the value.
@@ -175,18 +182,16 @@ The hash version of tdelete() cannot always return a non-null
 value even if there are  records left.  Not being a tree at
 all, it would cost runtime to provide a non-null return in
 some cases even when there are records left from tdelete().
-The return value from tdelete() is problematic in all versions,
-since it purports to return the parent of the deleted node,
-but what if the deleted node was the root?
-
-Note the trivial set of #defines in tsearch_tester.c that
-result in a standard-based naming of the functions so
-the libc version can be tested.
 
 The return value from tdelete() is particularly problematic
 because it purports to return a pointer to another record
 than the one deleted, yet no such record necessarily exists,
 but if something is deleted a non-null pointer is returned.
+
+Note the trivial and optional set of #defines in
+tsearch_tester.c that
+result in a standard-based naming of the functions so
+the libc version can be tested.
 
 The hash version requires use of the function
 dwarf_initialize_search_hash() to provide a hashing
