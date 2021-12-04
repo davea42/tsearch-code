@@ -44,8 +44,12 @@ and unpack
 
     
 #### Building from a clone
+
+Not recommended as one needs the GNU autotools
+installed for the autogen.sh step to work.
+    
     git clone https://github.com/davea42/tsearch-code
-    #Only need do this once, after clone.
+    #Only need do this after clone or git pull.
     cd /path/to/tsearch-code
     sh autogen.sh
 
