@@ -471,7 +471,7 @@ tsearch_inner( const void *key, struct hs_base* head,
     kc = compar(key,s->keyptr);
     if (kc == 0 ) {
         /* found! */
-        if (want_delete) {
+        if (intent == want_delete) {
             *owner_ptr = 0;
         }
         return (void *)&(s->keyptr);
@@ -481,7 +481,7 @@ tsearch_inner( const void *key, struct hs_base* head,
         kc = compar(key,c->keyptr);
         if (kc == 0 ) {
             /* found! */
-            if (want_delete) {
+            if (intent == want_delete) {
                 *owner_ptr = chain_parent;
             }
             return (void *)&(c->keyptr);
