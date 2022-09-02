@@ -30,7 +30,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-
 /*  The interfaces follow tsearch (See the Single
     Unix Specification) but the implementation is
     written without reference to the source of any
@@ -56,7 +55,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     is called a leaf.
 
 */
-
 
 #include "config.h"
 #include "stdlib.h" /* for free() etc */
@@ -108,7 +106,6 @@ static unsigned long primes[] =
 
 static unsigned long allowed_fill_percent = 90;
 
-
 struct hs_base {
     unsigned long tablesize_;
     unsigned long tablesize_entry_index_;
@@ -150,7 +147,6 @@ static void
 dwarf_tdestroy_inner(struct hs_base*h,
     void (*free_node)(void *nodep),
     int depth);
-
 
 /*  A trivial integer-based percentage calculation.
     Percents >100 are reasonable for a hash-with-chains
@@ -228,7 +224,6 @@ dwarf_initialize_search_hash( void **treeptr,
     *treeptr = base;
     return base;
 }
-
 
 /*  We don't really care whether hashpos or chainpos
     are 32 or 64 bits. 32 suffices. */
@@ -524,7 +519,6 @@ dwarf_tsearch(const void *key, void **headin,
     }
     return (void *)&(r->keyptr);
 }
-
 
 /* Search. */
 void *

@@ -110,7 +110,6 @@ walk_entry(const void *mt_data,VISIT x,int level)
     return;
 }
 
-
 int main()
 {
     unsigned i;

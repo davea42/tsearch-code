@@ -106,7 +106,6 @@ struct myacts {
     unsigned addr_;
 };
 
-
 /*  Another example of tree content is a simple value.
     Since the tree contains a pointer for each object
     we save, we can only directly save a value that fits
@@ -131,7 +130,6 @@ int(*applyby)(struct myacts *m,
     int hideactions,
     int printwalk,
     int dumpeverystage) = applybypointer;
-
 
 static int g_hideactions = 0;
 static const int increaseorder[] = {1,2,3,4,5,6};
@@ -729,7 +727,6 @@ applybypointer(struct myacts *m,
     return errcount;
 }
 
-
 static int
 standard_tests(void)
 {
@@ -1041,13 +1038,11 @@ run_timing_test(char *path)
         if (readbuf[0]) {
             insert_word_in_tree(readbuf);
         }
-
     }
     print_counts();
     fclose(f);
     return 0;
 }
-
 
 /* ============end large test for timing===========*/
 static void

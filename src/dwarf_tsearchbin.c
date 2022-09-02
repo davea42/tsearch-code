@@ -42,8 +42,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     Algorithm D.
 */
 
-
-
 #include "config.h"
 #include "stdlib.h" /* for free() */
 #include <stdio.h> /* for printf */
@@ -57,7 +55,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DW_PR_DUx "llx"
 #endif /* DW_PR defines */
 #include "dwarf_tsearch.h"
-
 
 /*  INVARIANT: The head node has no user data.
 
@@ -158,7 +155,6 @@ getlink(struct ts_entry*t,int a)
     }
     return(t->rlink);
 }
-
 
 /*  Dumping the tree to stdout. */
 void
@@ -504,7 +500,6 @@ dwarf_twalk_inner(const struct ts_entry *p,
     }
     action((const void *)(&(p->keyptr)),dwarf_endorder,level);
 }
-
 
 void
 dwarf_twalk(const void *headin,

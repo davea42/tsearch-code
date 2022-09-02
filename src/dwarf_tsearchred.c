@@ -54,7 +54,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     root so that
     the use does not see the root changing in flight.
 
-
     Kindle location 7808.
     Red-black BSTs are BSTs with red and black links satisfying:
         a)Red links lean left
@@ -69,8 +68,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         whose llink is not marked red.
 
 */
-
-
 
 #include "config.h"
 #include "stdlib.h" /* for free() */
@@ -96,7 +93,6 @@ struct ts_entry;
 void dwarf_check_balance(struct ts_entry *head,int finalprefix);
 #endif /* DW_CHECK_CONSISTENCY */
 
-
 struct ts_entry {
     /*  Keyptr usually points to a a record the user saved, the
         user record contains the user's key itself
@@ -115,7 +111,6 @@ struct ts_entry {
     struct ts_entry * llink;
     struct ts_entry * rlink;
 };
-
 
 /* Not needed for this set of functions. */
 void *
@@ -429,7 +424,6 @@ flipcolors(struct ts_entry*h)
     if (h->rlink) h->rlink->color = BLACK;
 }
 
-
 /* Kindle loc 7840.  */
 static struct ts_entry*
 rotateleft(struct ts_entry *h)
@@ -441,7 +435,6 @@ rotateleft(struct ts_entry *h)
     h->color = RED;
     return x;
 }
-
 
 /* Kindle loc 7848.  */
 static struct ts_entry*
@@ -652,7 +645,6 @@ findmin(struct ts_entry *h)
     return h;
 }
 
-
 /*  At Loc 8154 in Kindle.
     We copied out relevant data, so now delete the
     lowest key record (possibly while reorganizing the
@@ -830,7 +822,6 @@ dwarf_twalk_inner(const struct ts_entry *p,
     }
     action((const void *)(&(p->keyptr)),dwarf_endorder,level);
 }
-
 
 void
 dwarf_twalk(const void *rootp,
