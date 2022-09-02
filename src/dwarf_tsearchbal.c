@@ -126,14 +126,6 @@ static void printlevel(int level)
     }
 }
 
-/* Not needed for this set of functions. */
-void *
-dwarf_initialize_search_hash( void **treeptr,
-    UNUSEDARG unsigned long(*hashfunc)(const void *key),
-    UNUSEDARG unsigned long size_estimate)
-{
-    return *treeptr;
-}
 
 /* For debugging, mainly.
    We print the tree with the head node unnumbered
@@ -191,7 +183,7 @@ dwarf_check_balance_inner(struct ts_entry *t,int level,int maxdepth,
     if (level > maxdepth) {
         printf("%s Likely internal erroneous link loop, "
             "got to depth %d.\n", prefix,level);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     if (!t) {
         return 0;
@@ -528,12 +520,12 @@ tsearch_inner( const void *key, struct ts_entry* head,
                 fprintf(stderr,"Impossible balanced tree "
                     "situation!\n");
                 /* Impossible. Cannot be here. */
-                exit(1);
+                exit(EXIT_FAILURE);
             }
         } else {
             fprintf(stderr,"Impossible balanced tree situation!!\n");
             /* Impossible. Cannot be here. */
-            exit(1);
+            exit(EXIT_FAILURE);
         }
     }
 
@@ -1048,4 +1040,12 @@ dwarf_tdestroy(void *rootp, void (*free_node)(void *nodep))
         dwarf_tdestroy_inner(root,free_node,0);
     }
     free(head);
+}
+/* Not needed for this set of functions. */
+void *
+dwarf_initialize_search_hash( void **treeptr,
+    UNUSEDARG unsigned long(*hashfunc)(const void *key),
+    UNUSEDARG unsigned long size_estimate)
+{
+    return *treeptr;
 }
