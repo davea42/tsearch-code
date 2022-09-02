@@ -1,3 +1,42 @@
+2022-09-02:  David Anderson
+    commit 93b0ce5c8ce51a1f40334bddeb0c0a8fdf0520a5
+
+    Many instances of 2 blank lines in a row
+    now with 1 blank in their place.
+    No logic change.
+            modified:   dwarf_tsearchbal.c
+            modified:   dwarf_tsearchbin.c
+            modified:   dwarf_tsearchepp.c
+            modified:   dwarf_tsearchhash.c
+            modified:   dwarf_tsearchred.c
+            modified:   tsearch.c
+            modified:   tsearch_tester.c
+
+2022-09-02:  David Anderson
+    commit 452796e118044cb3cb82503573950ee55da8b15f
+
+    Moved the initialize hash function to the end.
+    Changed exit(1) to exit(EXIT_FAILURE)
+            modified:   src/dwarf_tsearchbal.c
+
+2022-09-02:  David Anderson
+    commit 993edd7891016caa04f738693dae75279198a595
+
+    We no longer use the llink field as an integer at any point.
+    We introduced a new field of treedepth to make it possible
+    to know tree depth.
+    A recent compiler identified cases of undefined
+    behavior in using llink as an integer.
+            modified:   src/dwarf_tsearchbal.c
+
+2022-08-07:  David Anderson
+    commit 90bf819b3ed4a7c85685cf5db854abf34f82d358
+
+    Moved all 2021 log data to ChangeLog2021
+    and 2022 change is now in ChangeLog
+            modified:   ChangeLog
+            new file:   ChangeLog2021
+
 2022-08-07:  David Anderson
     commit 1a7b733a13af56ed72b555d40f00a83e792824a9
 
