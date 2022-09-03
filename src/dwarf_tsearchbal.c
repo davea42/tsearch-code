@@ -435,7 +435,7 @@ tsearch_inner( const void *key, struct ts_entry* head,
                 break; /* to A5. */
             }
             if (q->balance) {
-                t = p;
+                t = p; /* t is no longer HEAD */
                 s = q;
             }
             p = q;
@@ -530,6 +530,7 @@ tsearch_inner( const void *key, struct ts_entry* head,
     if (s == t->rlink) {
         t->rlink = p;
     } else {
+        /*  ASSERT: Here t is never HEAD */
         t->llink = p;
     }
 #ifdef DW_CHECK_CONSISTENCY
