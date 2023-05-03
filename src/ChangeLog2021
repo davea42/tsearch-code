@@ -393,6 +393,8 @@
 
 2021-06-25:  David Anderson
     Starting new directory, now git.
+    This begins the tsearch code as its own project
+    on github, separated from libdwarf-code.
     commit 5c809e49a4fb6764fc8df2aa29202947796192bf
             new file:   ESSAY.txt
             new file:   README
