@@ -1,0 +1,429 @@
+2021-12-04:  David Anderson
+    commit 53437a76322036a4282e451328ddd7c974d166bd
+
+    Added a warning that building from a clone
+    requires one have GNU autotools installed.
+            modified:   README
+            modified:   README.md
+
+2021-12-03:  David Anderson
+    commit 9a2beaf6c37375308a269734341db4082af89199
+
+    Now shows clone and release use
+            modified:   README
+            modified:   README.md
+
+2021-12-03:  David Anderson
+    commit f321c7bb0a29cae535d3f7e03c33a83d1fbc4bc8
+
+    Small improvements.
+            modified:   README.md
+
+2021-12-03:  David Anderson
+    commit 406f9c7a44083c8397a6b58d41431b721dcf6c70
+
+    updated with metadata, nothing important.
+            modified:   ChangeLog
+
+2021-12-03:  David Anderson
+    commit a3470303f779d6d53d707e332c1329a5f0e6004b
+
+    Now fully fleshed out with 2021 updates.
+            modified:   ChangeLog
+
+2021-12-03:  David Anderson
+    commit e8bb88d0fef1820fef8bbcd767cb32feb044ce24
+
+    Updating so make dist works
+    and the dist created works too.
+            modified:   Makefile.am
+            modified:   src/Makefile.am
+            modified:   test/Makefile.am
+
+2021-11-30:  David Anderson
+    commit 6090184822bf8ecdc3b6fde55c152666bb8f2724
+
+    Fixing CID deref null pointer (meant to fix earlier).
+            modified:   dwarf_tsearchbin.c
+
+2021-11-30:  David Anderson
+    commit 2b0e9cc3ff2cac8f2c85ec7016d7d9d1f8ea3c38
+
+    Avoid dereference before null check.
+    Coverity CID 365810
+            modified:   dwarf_tsearchepp.c
+
+2021-11-30:  David Anderson
+    commit 79634974bd96319f35c28249a8d890c22795f19a
+
+    Fixing accidental dereference before null check
+    coverity scan CID 365809
+            modified:   tsearch_tester.c
+
+2021-11-30:  David Anderson
+    commit 9796f6788a94b13dd5fcbed5a7131b3248282057
+
+    Now with the right set of headers checked-for.
+            modified:   configure.ac
+
+    Removing unneeded include.
+            modified:   src/dwarf_tsearch.h
+
+    Removing obsolete comments and ensuring
+    includes are guarded by #ifdef where
+    appropriate.
+            modified:   src/dwarf_tsearchbal.c
+            modified:   src/dwarf_tsearchbin.c
+            modified:   src/dwarf_tsearchhash.c
+            modified:   src/dwarf_tsearchred.c
+            modified:   src/tsearch_tester.c
+
+2021-11-29:  David Anderson
+    commit d275a967f010f279d56aa95058220dd8bc1a04ed
+
+    Adding blank line front and end
+    as a test.
+            modified:   .travis.yml
+
+2021-11-29:  David Anderson
+    commit 4fbcc9057583896b612b777180c14d8b66f93010
+
+    Remove cache: line
+            modified:   .travis.yml
+
+2021-11-29:  David Anderson
+    commit a957c9d9755aa34a60f0ba08897b6485af632af4
+
+    Now cache: true
+            modified:   .travis.yml
+
+2021-11-29:  David Anderson
+    commit acc4f02e4b1171b07b9abddcd293ba19f71ceb46
+
+    remove ref to test directory test-suite.log
+            modified:   .travis.yml
+
+2021-11-29:  David Anderson
+    commit 242616c263b496cf731693cb53f602f6e40c4308
+
+    More wording tweaks, and correcting the markdown
+            modified:   README
+            modified:   README.md
+
+2021-11-29:  David Anderson
+    commit 8a1d43f53450e0a8ee77b86cddcd86c1981ebcd0
+
+    Fixed small typo
+            modified:   README
+            modified:   README.md
+
+2021-11-29:  David Anderson
+    commit 07e4a5f6061001f2c718f07229b87a456d3d843c
+
+    Small tweaks
+            modified:   README
+            modified:   README.md
+
+2021-11-29:  David Anderson
+    commit 947d6cc4c5e59c1deabf6bce61f7cba2a8762acf
+
+    Cleaning up the wording.
+            modified:   README
+            modified:   README.md
+
+2021-11-29:  David Anderson
+    commit 166719d65e243abd6d2d739e19018850a8714e90
+
+            modified:   README
+    New , basically identical to README
+            new file:   README.md
+
+2021-11-28:  David Anderson
+    commit 0efd8710a5b3be4d1a0fa2088f6aa48fd62f59b5
+
+    Turn off make check for travis. For now.
+            modified:   .travis.yml
+
+2021-11-28:  David Anderson
+    commit e6e2189acd3d900aa67cc9adef51c67d291e6ae0
+
+    Revamped to get the important build info first.
+            modified:   README
+
+2021-11-28:  David Anderson
+    commit 77e5251e7afbcb7ed207de8e9f464e85c648fba7
+
+    Add explicit word FAIL in error cases
+            modified:   src/tsearch_tester.c
+
+    Now checks for FAIL output.
+            modified:   test/runtests.sh
+
+2021-11-28:  David Anderson
+    commit 5bc72e1df5a2004f5ca54c5663003b6217b5e467
+
+            deleted:    scripts/CLEANUP
+    Removed ref to CLEANUP
+            modified:   test/runtests.sh
+
+2021-11-28:  David Anderson
+    commit c7a3d444745afb175edc271a1abd53fb5ffac517
+
+    Nearly have the tests run in standard fashion now.
+            modified:   Makefile.am
+            modified:   configure.ac
+            new file:   test/Makefile.am
+            renamed:    test/RUNTEST -> test/runtests.sh
+
+2021-11-28:  David Anderson
+    commit 274b8da69bd2309a7c48bdb6d69ba5f1a2bddb66
+
+    Made parts of this much clearer, removed
+    irrelevant ancient history comments.
+            modified:   README
+
+2021-11-28:  David Anderson
+    commit dfa14cfc707ee382d0eed50e5e2e82fc41dd9544
+
+    Now defines UNUSEDARG in one .h, not in all the .c files
+            modified:   src/dwarf_tsearch.h
+            modified:   src/dwarf_tsearchbal.c
+            modified:   src/dwarf_tsearchbin.c
+            modified:   src/dwarf_tsearchepp.c
+            modified:   src/dwarf_tsearchhash.c
+            modified:   src/dwarf_tsearchred.c
+            modified:   src/tsearch_tester.c
+
+2021-11-28:  David Anderson
+    commit ae87ccc3bdfdad4f963800ba13c52aea001f8899
+
+    Unused files.
+            deleted:    src/dwarf_incl.h
+            deleted:    src/dwarf_tsearch.c
+
+2021-11-28:  David Anderson
+    commit a34f9e38432d68068bc0989ffdca1400a9afa15c
+
+    No longer used.
+            deleted:    oldconfig.h
+
+2021-11-28:  David Anderson
+    commit f91f43973d27e40697e5e4e20c9baf58edf78749
+
+    Cleanups.
+            modified:   Makefile.am
+            modified:   dwarf_tsearch.c
+            modified:   dwarf_tsearchbal.c
+            modified:   dwarf_tsearchbin.c
+            modified:   dwarf_tsearchepp.c
+            modified:   dwarf_tsearchhash.c
+            modified:   dwarf_tsearchred.c
+            renamed:    config.h -> oldconfig.h
+            modified:   tsearch.c
+            modified:   tsearch_tester.c
+
+2021-11-28:  David Anderson
+    commit 6cd404a082b7af6f5c532d48102ad38322c26771
+
+    We don't keep Makefile in the source now.
+            deleted:    src/Makefile
+
+2021-11-28:  David Anderson
+    commit b9d424f0780a4cdcf5fb51b475aab271ef9c4c21
+
+    Things basically work with a couple new
+    executable names (libcsearch, not stdsearch)
+    but still with the old testing regime.
+            modified:   Makefile.am
+            modified:   configure.ac
+            new file:   m4/dw_compiler.m4
+            modified:   src/Makefile
+            modified:   src/Makefile.am
+            modified:   test/RUNTEST
+
+2021-11-27:  David Anderson
+    commit dbef4c66740953528466e5b54c9453594cee4541
+
+    Working toward a complete build.
+    Not ready yet!
+            new file:   ChangeLog
+            new file:   INSTALL
+            new file:   configure.ac
+            modified:   src/Makefile.am
+
+2021-11-27:  David Anderson
+    commit 211e33f9b70977489aeb1c1a0d207b826beabfe3
+
+    Toward standard form.
+            modified:   Makefile.am
+            new file:   src/Makefile.am
+
+2021-11-27:  David Anderson
+    commit 1fd44b1046e66a39e95385ccb4b1e12dc88067f4
+
+    Transitioning to new tree setup, a more
+    standard setup.
+            new file:   .gitignore
+            new file:   .travis.yml
+            new file:   AUTHORS
+            new file:   COPYING
+            new file:   Makefile.am
+            new file:   NEWS
+            modified:   README
+            new file:   autogen.sh
+
+2021-06-27:  David Anderson
+    commit 3a0bbb3036f6307f32ce457c113174c1edfab270
+
+    Removing trailing whitespace and
+    fixing lines with inappropriate indentations.
+            modified:   dwarf_tsearchbal.c
+            modified:   dwarf_tsearchbin.c
+            modified:   dwarf_tsearchepp.c
+            modified:   dwarf_tsearchhash.c
+            modified:   dwarf_tsearchred.c
+            modified:   tsearch.c
+            modified:   tsearch_tester.c
+
+2021-06-27:  David Anderson
+    commit 27c349cb1f7b719f083569fe045e67ce8722eb65
+
+            modified:   test/RUNTEST
+    Now cleans up after itself.
+
+2021-06-27:  David Anderson
+    commit 00618b6a94d7a7fd5999fec250ae0fe713ccf2e3
+
+    Now runs the original and
+    the sorted version.
+    Binary search behaves
+    badly with sorted input, but
+    that is to be expected.
+            modified:   RUNTEST
+            new file:   sortedwords
+            new file:   testwords
+
+2021-06-27:  David Anderson
+    commit 6235baa445676792882f7853beab1c69118057bb
+
+    Renaming a the suggested new approach
+    functions.
+            modified:   ESSAY.txt
+
+2021-06-27:  David Anderson
+    commit 0f750bfb37d6cf5414962edc95e6e4e04306fa14
+
+    Now works ok and just runs the timing
+    tests.
+            modified:   scripts/extractwords.py
+            modified:   src/tsearch_tester.c
+            new file:   test/BUILDWORDFILE
+            modified:   test/RUNTEST
+
+2021-06-27:  David Anderson
+    commit 8fb57ae610bcd13c26d4b82f9f4658bf2234a8c5
+
+    The basics for timing appear to be in place,
+    at least as a start.
+    Not tested.
+            new file:   scripts/CLEANUP
+            deleted:    scripts/TEST.sh
+            modified:   scripts/extractwords.py
+            modified:   src/tsearch_tester.c
+            modified:   test/RUNTEST
+
+2021-06-26:  David Anderson
+    commit fe14b4616e41b0c56a3992cc44029f5bcb845373
+
+    Simplifying the tests.
+            modified:   scripts/TEST.sh
+            modified:   src/Makefile
+            modified:   src/tsearch_tester.c
+            modified:   test/RUNTEST
+
+2021-06-26:  David Anderson
+    commit f048929e6fb5a7a31ebe337e14335c93fbf11d32
+
+    Using words as a tsearch test corpus
+            new file:   extractwords.py
+
+2021-06-25:  David Anderson
+    commit ffcfc9979e0471c054d75b85a16e79a2daa2454e
+
+    Dropping ancient junk.
+            deleted:    badsample
+            deleted:    comparatorsample
+            deleted:    concatlinesample
+            deleted:    secondsample
+            deleted:    testin
+
+2021-06-25:  David Anderson
+    commit 786b9580544db32087f445c164a3d6d2fedfec42
+
+    Further cleanup.
+            modified:   ESSAY.txt
+            modified:   README
+
+2021-06-25:  David Anderson
+    commit b80601bb15e35bdb8fc04b447e4ff4159a1c1431
+
+    Making the Knuth reference
+    more detailed.
+            modified:   README
+
+2021-06-25:  David Anderson
+    commit 2c1eb60b371b7730f3bedc4a291d15b11a6ab599
+
+    Major tweaks for correctness and reability.
+            modified:   README
+
+2021-06-25:  David Anderson
+    commit a48c36091a5d73a631ff18edad144c522551560e
+
+    Clean up the prototypes for a better look.
+            modified:   dwarf_tsearch.h
+
+            modified:   ../README
+
+2021-06-25:  David Anderson
+    commit dab53126d9bfc85465049bd8c2e5c0432b273780
+
+    Tweaked for easier reading.
+            modified:   README
+
+2021-06-25:  David Anderson
+    Starting new directory, now git.
+    commit 5c809e49a4fb6764fc8df2aa29202947796192bf
+            new file:   ESSAY.txt
+            new file:   README
+            new file:   scripts/TEST.sh
+            new file:   scripts/badsample
+            new file:   scripts/comparator.py
+            new file:   scripts/comparatorsample
+            new file:   scripts/concatlines.py
+            new file:   scripts/concatlinesample
+            new file:   scripts/secondsample
+            new file:   scripts/testin
+            new file:   src/ChangeLog
+            new file:   src/ChangeLog2014
+            new file:   src/ChangeLog2015
+            new file:   src/ChangeLog2016
+            new file:   src/ChangeLog2017
+            new file:   src/ChangeLog2018
+            new file:   src/ChangeLog2019
+            new file:   src/ChangeLog2020
+            new file:   src/Makefile
+            new file:   src/config.h
+            new file:   src/dwarf_incl.h
+            new file:   src/dwarf_tsearch.c
+            new file:   src/dwarf_tsearch.h
+            new file:   src/dwarf_tsearchbal.c
+            new file:   src/dwarf_tsearchbin.c
+            new file:   src/dwarf_tsearchepp.c
+            new file:   src/dwarf_tsearchhash.c
+            new file:   src/dwarf_tsearchred.c
+            new file:   src/tsearch.c
+            new file:   src/tsearch_tester.c
+            new file:   test/RUNTEST
+            new file:   tsearchlibtimes.ods
+

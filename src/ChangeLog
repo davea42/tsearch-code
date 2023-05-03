@@ -1,7 +1,8 @@
-2021-06-25 David Anderson
-    * Source moved from libdwarf to its own
-      git file set. Shortly to be public
-      on github.
-2021-05-14 David Anderson
-    * scripts/comparator.py,scripts/concatlines.py:
-      Reformatted to standard python style.
+2023-05-03:  David Anderson
+    commit a88753faa0d7ed6f019737df80a9f536296aad5f
+
+    Allowing a 64bit tree depth was silly.
+    Making it int suffices and saves 8 bytes in the struct
+    (counting saved padding space).
+            modified:   dwarf_tsearchbal.c
+
