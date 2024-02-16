@@ -4,7 +4,7 @@ Status](https://travis-ci.com/davea42/tsearch-code.svg?branch=master)](https://t
 # This is tsearch-code README.md
 
 Written January  2014
-Updated December 2021
+Updated February 2024
 
 This is not a library.  It is a collection of
 clean-room
@@ -200,6 +200,19 @@ The use of tsearch() and friends is a little tricky.
 That is just the way it is.  The best reference is the code
 in tsearch_tester.c, but see above for a plain text
 description.
+
+In reading the source code note comments in tsearch_inner(),
+a local (static) function in each variant..
+Comments such as 
+
+    /* A2. */
+    /* Does step A5. */
+    /* A7: */
+
+The A<n> are specific labels in the algorithm
+description in Knuth, intended to clarify,
+for the reader, where we are at each stage.
+
 
 The hash version of tdelete() cannot always return a non-null
 value even if there are  records left.  Not being a tree at
