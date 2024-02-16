@@ -112,7 +112,9 @@ Red black tree is an invention of Sedgewick which attempts
 to simplify the logic.
 
 Hashing (non-tree) is one of the many ways to implement
-a hashing searchable store.  Designed by me.
+a hashing searchable store.  It's intent is to be fast
+and clear and it is not the most space-efficient
+implementation possible. Designed by me.
 
 ## Why tsearch?
 The interfaces are of a well-known design.  While the
@@ -202,7 +204,7 @@ in tsearch_tester.c, but see above for a plain text
 description.
 
 In reading the source code note comments in tsearch_inner(),
-a local (static) function in each variant..
+a local (static) function in each variant note certain comments.
 Comments such as 
 
     /* A2. */
@@ -262,8 +264,9 @@ Trees, page 458.
 Robert Sedgewick and Kevin Wayne, Algorithms (4th
 Ed).  This is the crucial reference on red-black
 trees.  There is a fix in the errata of the
-3rd printing. Earlier editions of the book
-should be discarded, one thinks. 
+3rd printing.  Editions one to three of the book
+should be discarded due to errors/omissions
+in the book(s), one thinks.
 In addition, in dwarf_tsearchred.c, in
 two places I had to fix the logic, look for 'Mistake'
 in the source.
