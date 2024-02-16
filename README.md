@@ -209,10 +209,9 @@ Comments such as
     /* Does step A5. */
     /* A7: */
 
-The A<n> are specific labels in the algorithm
+The `A<n>` are specific labels in the tsearch algorithm
 description in Knuth, intended to clarify,
-for the reader, where we are at each stage.
-
+for the reader of the C source, where we are in Knuth at each stage.
 
 The hash version of tdelete() cannot always return a non-null
 value even if there are  records left.  Not being a tree at
